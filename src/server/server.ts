@@ -14,17 +14,17 @@ const io = new Server(http);
 
 io.on("connection", (socket) => {
   console.log("connected", socket.id);
-});
-
-io.on("test", (msg) => {
-  console.log("test", msg);
+  socket.on("test", (msg) => {
+    console.log(msg);
+  });
 });
 
 http.listen(PORT, "0.0.0.0", () => {
   console.log(`http://localhost:${PORT}`);
   for (const addrs of Object.values(networkInterfaces())) {
     for (const a of addrs ?? []) {
-      if (a.family === "IPv4" && !a.internal) console.log(`http://${a.address}:${PORT}`);
+      if (a.family === "IPv4" && !a.internal)
+        console.log(`http://${a.address}:${PORT}`);
     }
   }
 });

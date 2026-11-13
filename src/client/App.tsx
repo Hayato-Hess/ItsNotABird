@@ -4,13 +4,14 @@ import { io } from "socket.io-client";
 const socket = io();
 
 export function App() {
-  useEffect(() => {
+  const test = () => {
     socket.emit("test", "blub");
-  });
+  };
 
   return (
     <>
       <div>Hello World</div>
+      <button onClick={test}>Send Blub</button>
     </>
   );
 }
