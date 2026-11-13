@@ -3,6 +3,10 @@ import { networkInterfaces } from "node:os";
 import { fileURLToPath } from "node:url";
 import express from "express";
 import { Server } from "socket.io";
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from "../shared/message.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
 
@@ -10,7 +14,7 @@ const app = express();
 app.use(express.static(fileURLToPath(new URL("../client", import.meta.url))));
 
 const http = createServer(app);
-const io = new Server(http);
+const io = new Server<ClientToServerEvents, ServerToClientEvents>(http);
 
 io.on("connection", (socket) => {
   console.log("connected", socket.id);

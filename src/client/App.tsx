@@ -1,7 +1,10 @@
-import { useEffect, useState, type FormEvent } from "react";
-import { io } from "socket.io-client";
+import { io, type Socket } from "socket.io-client";
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from "../shared/message";
 
-const socket = io();
+const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
 export function App() {
   const test = () => {
