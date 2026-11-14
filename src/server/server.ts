@@ -1,20 +1,17 @@
-import { createServer } from "node:http";
-import { networkInterfaces } from "node:os";
-import { fileURLToPath } from "node:url";
+import {createServer} from "node:http";
+import {networkInterfaces} from "node:os";
+import {fileURLToPath} from "node:url";
 import express from "express";
-import { Server } from "socket.io";
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from "../shared/message.js";
-import { RoomId } from "../shared/Data/RoomId.js";
-import { Room } from "./Data/Room.js";
-import { Player } from "./Data/Player.js";
-import { PlayerId } from "../shared/Data/PlayerId.js";
-import { GameState } from "../shared/Data/GameState.js";
-import { MessagePayload } from "../shared/Data/Messages/MessagePayload.js";
-import { MessageSource } from "../shared/Data/Messages/MessageSource.js";
-import { WordToGuess } from "../shared/Data/WordToGuess.js";
+import {Server} from "socket.io";
+import type {ClientToServerEvents, ServerToClientEvents,} from "../shared/message.js";
+import {RoomId} from "../shared/Data/RoomId.js";
+import {Room} from "./Data/Room.js";
+import {Player} from "./Data/Player.js";
+import {PlayerId} from "../shared/Data/PlayerId.js";
+import {GameState} from "../shared/Data/GameState.js";
+import {MessagePayload} from "../shared/Data/Messages/MessagePayload.js";
+import {MessageSource} from "../shared/Data/Messages/MessageSource.js";
+import {WordToGuess} from "../shared/Data/WordToGuess.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
 
@@ -74,6 +71,9 @@ io.on("connection", (socket) => {
       data: room.toSharedRoom(),
     });
     sendRoomUpdate(room);
+    if(room.game.getGameData().gameState == GameState.Started){
+      io.to(room.id).emit("UpdateCanvas", room.game.getGameData().canvas);
+    }
   });
 
   socket.on("ToggleReady", (callback) => {
@@ -128,7 +128,6 @@ io.on("connection", (socket) => {
     }
 
     room.game.updateCanvas(canvas);
-
     io.to(room.id).emit("UpdateCanvas", canvas);
   });
 

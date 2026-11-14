@@ -3,18 +3,24 @@ import {SharedGameData} from "../../shared/Data/SharedGameData.js";
 import {GameState} from "../../shared/Data/GameState.js";
 import {WordToGuess} from "../../shared/Data/WordToGuess.js";
 import {allWordList} from "./AllWordList.js";
+import {Canvas} from "../../shared/Data/Canvas/Canvas.js";
 
 export class GameData {
     currentSearchedWord : WordToGuess | null = null;
     currentActivePlayer : PlayerId | null = null;
     gameState: GameState = GameState.Looby;
     wordList : WordToGuess[] = [];
+    canvas : Canvas = {Emojis : []};
 
     public toSharedGameData() : SharedGameData{
         return {
             currentActivePlayer : this.currentActivePlayer,
             gameState : this.gameState,
         };
+    }
+
+    public updateCanvas(canvas : Canvas) : void {
+        this.canvas = canvas;
     }
 
     public getNextWordListItem() : WordToGuess{

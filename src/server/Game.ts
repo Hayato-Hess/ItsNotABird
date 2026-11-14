@@ -7,24 +7,18 @@ import { distance, closest } from 'fastest-levenshtein';
 
 export class Game {
     private _gameData: GameData;
-    private _canvas : Canvas;
     private _room : Room;
 
     constructor(room : Room) {
         this._gameData = new GameData();
-        this._canvas = {Emojis : []};
         this._room = room;
     }
 
-    public updateCanvas(canvas : Canvas) : void {
-        this._canvas = canvas;
-    }
-
-    get canvas(): Canvas {
-        return this._canvas;
-    }
-
     getGameData = (): GameData => this._gameData;
+
+    public updateCanvas(canvas : Canvas) : void {
+        this._gameData.updateCanvas(canvas);
+    }
 
     start() {
         this.setActivePlayerToRandom();
