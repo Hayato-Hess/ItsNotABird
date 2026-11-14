@@ -7,7 +7,7 @@ export function EmojiToolbar() {
       <div>Emoji Toolbar</div>
       <div>
         {Emojis.map((emoji) => (
-          <DraggableEmojie key={emoji} id={"new_" + emoji} emojieId={emoji} />
+          <DraggableEmojie key={emoji} id={"new_" + emoji} emojieId={emoji} ghost />
         ))}
       </div>
     </div>
