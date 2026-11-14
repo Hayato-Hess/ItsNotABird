@@ -1,7 +1,21 @@
 import styles from "./DraggableEmojie.module.css";
 import { emojiUrl } from "../emojies/emojies";
 import { useDraggable } from "@dnd-kit/react";
-import { Feedback } from "@dnd-kit/dom";
+import {
+  Feedback,
+  KeyboardSensor,
+  PointerActivationConstraints,
+  PointerSensor,
+} from "@dnd-kit/dom";
+
+const sensors = [
+  PointerSensor.configure({
+    activationConstraints: [
+      new PointerActivationConstraints.Distance({ value: 5 }),
+    ],
+  }),
+  KeyboardSensor,
+];
 
 export type DraggableEmojieProps = {
   id: string;
@@ -20,6 +34,7 @@ export const DraggableEmojie = ({
       id,
       emojieId,
     },
+    sensors,
     plugins: [
       Feedback.configure({
         feedback: ghost ? "clone" : "default",
@@ -33,6 +48,7 @@ export const DraggableEmojie = ({
       key={emojieId}
       src={emojiUrl(emojieId)}
       alt={emojieId}
+      draggable={false}
       className={styles.emojie}
       style={{ opacity: ghost && isDragging ? 0.6 : 1 }}
     />

@@ -2,4 +2,9 @@
   aspect-ratio: 1;
   height: 3.5vh;
   image-rendering: pixelated;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
 }
