@@ -1,16 +1,19 @@
 import {PlayerId} from "../../shared/Data/PlayerId.js";
-import {SharedRoom} from "../../shared/Data/SharedRoom.js";
 import {SharedPlayer} from "../../shared/Data/SharedPlayer.js";
+import type {ClientToServerEvents, ServerToClientEvents} from "../../shared/message.js";
+import {Socket} from "socket.io";
 
 export class Player {
     Id: PlayerId;
     Name: string;
     IsReady: boolean = false;
     Score : number = 0;
+    Socket: Socket<ClientToServerEvents, ServerToClientEvents>;
 
-    constructor(id: PlayerId, Name: string) {
+    constructor(id: PlayerId, Name: string, socket: Socket<ClientToServerEvents, ServerToClientEvents>) {
         this.Id = id;
         this.Name = Name;
+        this.Socket = socket;
     }
 
     public toSharedPlayer() : SharedPlayer{

@@ -3,6 +3,7 @@ import {Canvas} from "../shared/Data/Canvas/Canvas.js";
 import {Room} from "./Data/Room.js";
 import {GameState} from "../shared/Data/GameState.js";
 import {PlayerId} from "../shared/Data/PlayerId.js";
+import {allWordList} from "./Data/AllWordList.js";
 
 export class Game {
     private _gameData: GameData;
@@ -27,8 +28,12 @@ export class Game {
 
     start() {
         this.setActivePlayerToRandom();
-        this._gameData.currentSearchedWord = "bird"; // todo wordlist this
+        this.selectRandomWord();
         this._gameData.gameState = GameState.Started;
+    }
+
+    private selectRandomWord() {
+        this._gameData.currentSearchedWord = this._gameData.getNextWordListItem();
     }
 
     private setActivePlayerToRandom() {
@@ -36,7 +41,7 @@ export class Game {
     }
 
     isCorrectMessage(message:string) : boolean {
-        return this._gameData.currentSearchedWord === message;
+        return this._gameData.currentSearchedWord?.word === message;
     }
 
     correctMessageSent(sender: PlayerId) : number {
@@ -46,6 +51,7 @@ export class Game {
         }else{
             this._gameData.currentActivePlayer = this._room.players[(index+1)%this._room.players.length].Id;
         }
+        this.selectRandomWord();
 
         let senderPlayer = this._room.players.find(player => player.Id == sender);
         if (!senderPlayer) {

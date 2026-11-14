@@ -11,6 +11,7 @@ import {PlayerId} from "../shared/Data/PlayerId.js";
 import {GameState} from "../shared/Data/GameState.js";
 import {MessagePayload} from "../shared/Data/Messages/MessagePayload.js";
 import {MessageSource} from "../shared/Data/Messages/MessageSource.js";
+import {WordToGuess} from "../shared/Data/WordToGuess.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
 
@@ -31,7 +32,7 @@ io.on("connection", (socket) => {
     const room = new Room(roomId);
     const playerId : PlayerId = socket.id;
 
-    const newPlayer = new Player(playerId, playerName);
+    const newPlayer = new Player(playerId, playerName, socket);
     room.join(newPlayer);
     socket.join(roomId);
     roomMembership.set(playerId, roomId);
@@ -55,7 +56,7 @@ io.on("connection", (socket) => {
     }
 
     const playerId : PlayerId = socket.id;
-    const newPlayer = new Player(playerId, playerName);
+    const newPlayer = new Player(playerId, playerName, socket);
     room.join(newPlayer);
     socket.join(roomId);
     roomMembership.set(playerId, roomId);
@@ -95,7 +96,7 @@ io.on("connection", (socket) => {
 
     io.to(room.id).emit("RoomUpdate", room.toSharedRoom());
     if(game.getGameData().gameState == GameState.Started){
-      sendGameStart(room);
+      startNewGame(room);
     }
   });
 
@@ -156,7 +157,7 @@ http.listen(PORT, "0.0.0.0", () => {
   }
 });
 
-function sendGameStart(room: Room) {
+function startNewGame(room: Room) {
   let newActivePlayer = <PlayerId>room.game.getGameData().currentActivePlayer;
   let player = findPlayer(newActivePlayer);
 
@@ -166,6 +167,7 @@ function sendGameStart(room: Room) {
   } satisfies MessagePayload);
 
   io.to(room.id).emit("GameStart", newActivePlayer);
+  player?.Socket.emit("WordToGuess", <WordToGuess> room.game.getGameData().currentSearchedWord)
 }
 
 function sendGameEnd(room: Room) {
@@ -191,7 +193,7 @@ function handleCorrectMessageReceived(room: Room, sender : Player) {
   if (room.game.getGameData().gameState == GameState.GameEnd) {
     sendGameEnd(room);
   } else {
-    sendGameStart(room);
+    startNewGame(room);
   }
 }
 

@@ -4,11 +4,13 @@ import { MessagePayload } from "./Data/Messages/MessagePayload.js";
 import { SharedRoom } from "./Data/SharedRoom.js";
 import { RoomId } from "./Data/RoomId.js";
 import { ServerResponse } from "./Data/ServerResponse.js";
+import {WordToGuess} from "./Data/WordToGuess.js";
 
 export interface ServerToClientEvents {
   RoomUpdate: (updatedRoom: SharedRoom) => void;
   Message: (message: MessagePayload) => void;
-  UpdateCanvas: (Canvas: Canvas) => void;
+  UpdateCanvas: (canvas: Canvas) => void;
+  WordToGuess: (wordToGuess: WordToGuess) => void;
 
   // state changes
   GameStart: (newActivePlayer: PlayerId) => void;
