@@ -38,13 +38,20 @@ io.on("connection", (socket) => {
 
     roomMap.set(roomId, room);
 
-    callback(room.toSharedRoom());
+    callback({
+      success: true,
+      data: room.toSharedRoom(),
+    })
   });
 
   socket.on("JoinRoom",  (playerName, roomId : RoomId, callback) => {
     const room = roomMap.get(roomId);
     if (!room) {
-      throw new Error("Room not found");
+      callback({
+        success: false,
+        error: "Room not found",
+      })
+      return
     }
 
     const playerId : PlayerId = socket.id;
@@ -53,16 +60,31 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     roomMembership.set(playerId, roomId);
 
-    callback(room.toSharedRoom());
+    callback({
+      success: true,
+      data: room.toSharedRoom(),
+    })
+    sendRoomUpdate(room);
   });
 
-  socket.on("SetReady", newState => {
+  socket.on("SetReady", (newState, callback) => {
     const playerId : PlayerId = socket.id;
     const room = findRoom(playerId);
+    if(!room){
+      callback({
+        success: false,
+        error: "Room not found",
+      })
+      return
+    }
 
     const player = room.players.find(p=>p.Id == playerId)
     if(!player){
-      throw new Error("Player not found")
+      callback({
+            success : false,
+            error: "player not found"
+      })
+      return
     }
     player.IsReady = newState;
 
@@ -77,28 +99,45 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("UpdateCanvas",  (canvas) => {
+  socket.on("UpdateCanvas",  (canvas, callback) => {
     const playerId : PlayerId = socket.id;
     const room = findRoom(playerId);
-
-    if(room?.game.getGameData().currentActivePlayer != playerId){
-      console.log("a non active player is updating the canvas")
-      //throw new Error("Not the active player!") // todo
+    if(!room){
+      callback({
+        success: false,
+        error: "Room not found",
+      })
+      return
     }
 
-    room?.game.updateCanvas(canvas);
+    if(room.game.getGameData().currentActivePlayer != playerId){
+      callback({
+        success: false,
+        error: "a non active player is updating the canvas",
+      })
+      return
+    }
+
+    room.game.updateCanvas(canvas);
 
     io.to(room.id).emit("UpdateCanvas", canvas);
   });
 
-  socket.on("Message", (message) => {
+  socket.on("Message", (message, callback) => {
     const playerId : PlayerId = socket.id;
     let player = findPlayer(playerId);
     const room = findRoom(playerId);
+    if(!room){
+      callback({
+        success: false,
+        error: "Room not found",
+      })
+      return
+    }
 
     io.to(room.id).emit("Message", {
       message: player?.Name + ": " + message,
-      source: MessageSource.Server,
+      source: MessageSource.Player,
     } satisfies MessagePayload);
 
     if(room.game.isCorrectMessage(message) && player){
@@ -140,7 +179,7 @@ function sendGameEnd(room: Room) {
 
 function handleCorrectMessageReceived(room: Room, sender : Player) {
   room.game.correctMessageSent(sender.Id);
-  io.to(room.id).emit("RoomUpdate", room.toSharedRoom());
+  sendRoomUpdate(room);
 
   io.to(room.id).emit("RoundEnd");
 
@@ -156,10 +195,10 @@ function handleCorrectMessageReceived(room: Room, sender : Player) {
   }
 }
 
-function findRoom(playerId: string) : Room {
+function findRoom(playerId: string) : Room | undefined {
   const roomId: RoomId | undefined = roomMembership.get(playerId);
   if (!roomId) {
-    throw new Error("Room not found")
+    return undefined;
   }
 
   return <Room>roomMap.get(roomId);
@@ -167,5 +206,11 @@ function findRoom(playerId: string) : Room {
 
 function findPlayer(playerId : PlayerId) : Player | undefined {
   let room = findRoom(playerId);
+  if(!room) return undefined;
+
   return room.players.find(value => value.Id == playerId);
+}
+
+function sendRoomUpdate(room: Room) {
+  io.to(room.id).emit("RoomUpdate", room.toSharedRoom());
 }
