@@ -1,7 +1,24 @@
+import { useState } from "react";
+import { useClientState } from "../useClientState";
 import { Button } from "./Button";
 import { Flex } from "./Flex";
 
 export function Chat() {
+  const { state, gameFunctions, lobbyFunctions } = useClientState();
+  const [msg, setMsg] = useState("");
+
+  const sendMessage = () => {
+    if (msg == "") {
+      return;
+    }
+    if (state.state === "game") {
+      gameFunctions.guess(msg);
+    } else if (state.state === "lobby") {
+      lobbyFunctions.sendMessage(msg);
+    }
+    setMsg("");
+  };
+
   return (
     <Flex
       direction="column"
@@ -10,10 +27,15 @@ export function Chat() {
     >
       <div>TODO CHAT</div>
       <div style={{ flex: 1, overflowY: "auto" }}></div>
-      <input type="text" placeholder="Type a message..." />
+      <input
+        type="text"
+        placeholder="Type a message..."
+        value={msg}
+        onChange={(e) => setMsg(e.target.value)}
+      />
       <Button
         onClick={() => {
-          console.log("Send button clicked");
+          sendMessage();
         }}
       >
         Send
