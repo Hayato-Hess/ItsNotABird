@@ -1,6 +1,7 @@
 export type InputFieldProps = {
   value: string;
   label?: string;
+  width?: string;
   onChange: (newValue: string) => void;
 };
 
@@ -13,6 +14,7 @@ export function InputField(props: InputFieldProps) {
         type="text"
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
+        style={{ width: props.width }}
       />
     </div>
   );
