@@ -9,12 +9,14 @@ export interface ClientState {
   state: "main" | "lobby" | "game";
   room?: SharedRoom;
   canvas: Canvas;
+  messages: string[];
 }
 
 export const INITIAL_GAME_STATE: ClientState = {
   state: "main",
   room: undefined,
   canvas: { Emojis: [] },
+  messages: [],
 };
 
 const ClientStateContext = createContext<{
@@ -66,7 +68,6 @@ export function ClientStateProvider({
 
   const toggleReadyness = () => {
     socket.emit("SetReady", true);
-    updateState({ state: "game" });
   };
 
   const sendMessage = (msg: string) => {
@@ -91,11 +92,18 @@ export function ClientStateProvider({
     socket.on("GameEnd", () => {
       updateState({ state: "lobby" });
     });
+    socket.on("Message", (msg) => {
+      setState((prev) => ({
+        ...prev,
+        messages: [...prev.messages, msg.message],
+      }));
+    });
     return () => {
       socket.off("RoomUpdate");
       socket.off("GameStart");
       socket.off("UpdateCanvas");
       socket.off("GameEnd");
+      socket.off("Message");
     };
   }, [socket]);
 
