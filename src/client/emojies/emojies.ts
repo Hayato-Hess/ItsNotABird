@@ -9,6 +9,14 @@ export const Emojis = [
   "mood1",
   "mood2",
   "mood3",
+  "mood4",
+  "mood5",
+  "moon",
+  "rain",
+  "snow",
+  "star",
+  "storm",
+  "sun",
 ];
 
 export function emojiUrl(id: string) {
