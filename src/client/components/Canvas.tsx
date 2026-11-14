@@ -2,6 +2,7 @@ import styles from "./Canvas.module.css";
 import { CanvasEmoji } from "../../shared/Data/Canvas/CanvasEmoji";
 import { useDroppable } from "@dnd-kit/react";
 import { DraggableEmojie } from "./DraggableEmojie";
+import { useEffect } from "react";
 
 export type CanvasProps = {
   id: string;
@@ -9,6 +10,7 @@ export type CanvasProps = {
   disableInteraction?: boolean;
   selectedId?: string;
   onSelect?: (id: string | undefined) => void;
+  onEmojyChange?: (id: string, newScale: number, newRotation: number) => void;
 };
 
 export function Canvas(props: CanvasProps) {
@@ -17,11 +19,24 @@ export function Canvas(props: CanvasProps) {
     disabled: props.disableInteraction,
   });
 
+  const { selectedId, onSelect } = props;
+  useEffect(() => {
+    if (!selectedId) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (!(e.target instanceof Element && e.target.closest("[data-canvas-emoji]"))) {
+        onSelect?.(undefined);
+      }
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [selectedId, onSelect]);
+
   return (
     <div className={styles.canvas} ref={ref}>
       {props.data.map((emoji) => (
         <div
           key={emoji.id}
+          data-canvas-emoji
           style={{
             position: "absolute",
             left: `${emoji.PlacementX}%`,
@@ -31,11 +46,19 @@ export function Canvas(props: CanvasProps) {
           <DraggableEmojie
             id={emoji.id}
             emojieId={emoji.emojieId}
+            scale={emoji.Scale}
+            rotation={emoji.Rotation}
             disableDrag={props.disableInteraction}
             onSelect={() => {
               props.onSelect?.(emoji.id);
             }}
             selected={props.selectedId === emoji.id}
+            onResize={(v) => {
+              props.onEmojyChange?.(emoji.id, v, emoji.Rotation);
+            }}
+            onRotate={(v) => {
+              props.onEmojyChange?.(emoji.id, emoji.Scale, v);
+            }}
           />
         </div>
       ))}

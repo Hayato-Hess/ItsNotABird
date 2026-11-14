@@ -76,7 +76,6 @@ export function Game() {
                 Scale: 1,
                 Rotation: 0,
               });
-              setSelectedEmojiId(id);
             } else {
               all.splice(prevIndex, 1);
               all.push({
@@ -89,7 +88,7 @@ export function Game() {
             }
 
             updateCanvas({ Emojis: all });
-            setSelectedEmojiId(emj?.id);
+            setSelectedEmojiId(all[all.length - 1].id);
           }
         }}
       >
@@ -119,6 +118,20 @@ export function Game() {
               disableInteraction={!isActivePlayer}
               selectedId={selectedEmojiId}
               onSelect={setSelectedEmojiId}
+              onEmojyChange={(id, newScale, newRotation) => {
+                const emojiIndex = state.canvas.Emojis.findIndex(
+                  (e) => e.id === id,
+                );
+                if (emojiIndex !== -1) {
+                  const updatedEmojis = [...state.canvas.Emojis];
+                  updatedEmojis[emojiIndex] = {
+                    ...updatedEmojis[emojiIndex],
+                    Scale: newScale,
+                    Rotation: newRotation,
+                  };
+                  updateCanvas({ Emojis: updatedEmojis });
+                }
+              }}
             />
             {isActivePlayer && <EmojiToolbar />}
           </div>
