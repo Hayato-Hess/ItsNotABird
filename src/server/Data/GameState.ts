@@ -1,5 +1,7 @@
+import {PlayerId} from "../../shared/Data/PlayerId.js";
+
 export type GameState = {
-    currentActiveUserIndex : number;
+    currentActivePlayer : PlayerId;
     currentSearchedWord : string;
 
 }
