@@ -1,7 +1,13 @@
 .canvas {
   border: 1px solid #fff;
-  background: #aaa;
-  width: 200px;
-  height: 200px;
+  background: #484646;
+  aspect-ratio: 1;
+  height: 60vh;
   position: relative;
+}
+@media (max-width: 768px) {
+  .canvas {
+    height: auto;
+    width: min(100%, 45vh);
+  }
 }

@@ -1,6 +1,9 @@
+import { Button } from "../components/Button";
 import { Canvas } from "../components/Canvas";
+import { Chat } from "../components/Chat";
 import { EmojiToolbar } from "../components/EmojiToolbar";
 import { useClientState } from "../useClientState";
+import styles from "./Game.module.css";
 import { DragDropProvider } from "@dnd-kit/react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -11,7 +14,6 @@ export function Game() {
 
   return (
     <div>
-      <h2>Games</h2>
       <DragDropProvider
         onDragEnd={(event) => {
           if (event.canceled) return;
@@ -38,11 +40,15 @@ export function Game() {
             const canvasRect = canvas?.getBoundingClientRect();
             const positionX =
               dragged && canvas && canvasRect
-                ? dragged.left - canvasRect.left - canvas.clientLeft
+                ? ((dragged.left - canvasRect.left - canvas.clientLeft) /
+                    canvasRect.width) *
+                  100
                 : 0;
             const positionY =
               dragged && canvas && canvasRect
-                ? dragged.top - canvasRect.top - canvas.clientTop
+                ? ((dragged.top - canvasRect.top - canvas.clientTop) /
+                    canvasRect.height) *
+                  100
                 : 0;
 
             if (!emj) {
@@ -63,8 +69,15 @@ export function Game() {
           }
         }}
       >
-        <Canvas id="canvas" data={state.canvas.Emojis} />
-        <EmojiToolbar />
+        <div className={styles.layout}>
+          <div className={styles.board}>
+            <Canvas id="canvas" data={state.canvas.Emojis} />
+            <EmojiToolbar />
+          </div>
+          <div className={styles.chat}>
+            <Chat />
+          </div>
+        </div>
       </DragDropProvider>
     </div>
   );

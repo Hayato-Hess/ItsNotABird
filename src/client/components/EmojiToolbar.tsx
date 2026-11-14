@@ -1,15 +1,27 @@
-import { emojiUrl, Emojis } from "../emojies/emojies";
+import styles from "./EmojiToolbar.module.css";
+import { Emojis } from "../emojies/emojies";
 import { DraggableEmojie } from "./DraggableEmojie";
+import { Flex } from "./Flex";
 
 export function EmojiToolbar() {
   return (
-    <div>
-      <div>Emoji Toolbar</div>
-      <div>
+    <div style={{ width: "100%" }}>
+      <Flex
+        wrap
+        gap="10px"
+        justify="start"
+        align="start"
+        className={styles.toolbar}
+      >
         {Emojis.map((emoji) => (
-          <DraggableEmojie key={emoji} id={"new_" + emoji} emojieId={emoji} ghost />
+          <DraggableEmojie
+            key={emoji}
+            id={"new_" + emoji}
+            emojieId={emoji}
+            ghost
+          />
         ))}
-      </div>
+      </Flex>
     </div>
   );
 }

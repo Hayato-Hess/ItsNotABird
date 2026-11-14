@@ -32,7 +32,7 @@ export class Game {
     }
 
     private setActivePlayerToRandom() {
-        this._gameData.currentActivePlayer = this._room.players[Math.random() * this._room.players.length].Id
+        this._gameData.currentActivePlayer = this._room.players[Math.floor(Math.random() * this._room.players.length)].Id
     }
 
     isCorrectMessage(message:string) : boolean {
