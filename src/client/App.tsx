@@ -22,7 +22,7 @@ export function App() {
       <Flex flex={1} justify="center" style={{ width: "100%" }}>
         <div
           style={{
-            maxWidth: "40rem",
+            maxWidth: "60rem",
             width: "100%",
             height: "100%",
             padding: "1rem",

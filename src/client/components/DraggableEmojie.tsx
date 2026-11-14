@@ -20,24 +20,21 @@ const sensors = [
 export type DraggableEmojieProps = {
   id: string;
   emojieId: string;
-  /** Original bleibt liegen, gezogen wird eine Kopie */
   ghost?: boolean;
+  disableDrag?: boolean;
 };
-export const DraggableEmojie = ({
-  id,
-  emojieId,
-  ghost = false,
-}: DraggableEmojieProps) => {
+export const DraggableEmojie = (props: DraggableEmojieProps) => {
   const { ref, isDragging } = useDraggable({
-    id,
+    id: props.id,
     data: {
-      id,
-      emojieId,
+      id: props.id,
+      emojieId: props.emojieId,
     },
+    disabled: props.disableDrag,
     sensors,
     plugins: [
       Feedback.configure({
-        feedback: ghost ? "clone" : "default",
+        feedback: props.ghost ? "clone" : "default",
         dropAnimation: null,
       }),
     ],
@@ -45,12 +42,12 @@ export const DraggableEmojie = ({
   return (
     <img
       ref={ref}
-      key={emojieId}
-      src={emojiUrl(emojieId)}
-      alt={emojieId}
+      key={props.emojieId}
+      src={emojiUrl(props.emojieId)}
+      alt={props.emojieId}
       draggable={false}
       className={styles.emojie}
-      style={{ opacity: ghost && isDragging ? 0.6 : 1 }}
+      style={{ opacity: props.ghost && isDragging ? 0.6 : 1 }}
     />
   );
 };

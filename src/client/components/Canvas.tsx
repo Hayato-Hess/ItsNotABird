@@ -6,11 +6,13 @@ import { DraggableEmojie } from "./DraggableEmojie";
 export type CanvasProps = {
   id: string;
   data: CanvasEmoji[];
+  disableInteraction?: boolean;
 };
 
 export function Canvas(props: CanvasProps) {
   const { ref } = useDroppable({
     id: props.id,
+    disabled: props.disableInteraction,
   });
 
   return (
@@ -24,7 +26,11 @@ export function Canvas(props: CanvasProps) {
             top: `${emoji.PlacementY}%`,
           }}
         >
-          <DraggableEmojie id={emoji.id} emojieId={emoji.emojieId} />
+          <DraggableEmojie
+            id={emoji.id}
+            emojieId={emoji.emojieId}
+            disableDrag={props.disableInteraction}
+          />
         </div>
       ))}
     </div>
