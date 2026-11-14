@@ -1,5 +1,5 @@
-import { CanvasEmoji } from "../../shared/Data/Canvas/CanvasEmoji";
 import styles from "./Canvas.module.css";
+import { CanvasEmoji } from "../../shared/Data/Canvas/CanvasEmoji";
 import { useDroppable } from "@dnd-kit/react";
 import { DraggableEmojie } from "./DraggableEmojie";
 
@@ -20,8 +20,8 @@ export function Canvas(props: CanvasProps) {
           key={emoji.id}
           style={{
             position: "absolute",
-            left: emoji.PlacementX,
-            top: emoji.PlacementY,
+            left: `${emoji.PlacementX}%`,
+            top: `${emoji.PlacementY}%`,
           }}
         >
           <DraggableEmojie id={emoji.id} emojieId={emoji.emojieId} />

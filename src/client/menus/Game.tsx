@@ -38,11 +38,15 @@ export function Game() {
             const canvasRect = canvas?.getBoundingClientRect();
             const positionX =
               dragged && canvas && canvasRect
-                ? dragged.left - canvasRect.left - canvas.clientLeft
+                ? ((dragged.left - canvasRect.left - canvas.clientLeft) /
+                    canvasRect.width) *
+                  100
                 : 0;
             const positionY =
               dragged && canvas && canvasRect
-                ? dragged.top - canvasRect.top - canvas.clientTop
+                ? ((dragged.top - canvasRect.top - canvas.clientTop) /
+                    canvasRect.height) *
+                  100
                 : 0;
 
             if (!emj) {
