@@ -27,9 +27,6 @@ const roomMembership =  new Map<PlayerId, RoomId>();
 
 io.on("connection", (socket) => {
   console.log("connected", socket.id);
-  socket.on("test", (msg) => {
-    console.log(msg);
-  });
 
   socket.on("CreateRoom", (playerName, callback) => {
     const roomId : RoomId = Math.random().toString(36).substring(2, 7).toUpperCase();
