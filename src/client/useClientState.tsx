@@ -27,6 +27,10 @@ const ClientStateContext = createContext<{
   lobbyFunctions: {
     toggleReadyness: () => void;
   };
+  gameFunctions: {
+    guess: (string: string) => void;
+    updateCanvas: (canvas: Canvas) => void;
+  };
   toggleReadyness: () => void;
 }>(null as never);
 
@@ -64,6 +68,15 @@ export function ClientStateProvider({
     updateState({ state: "game" });
   };
 
+  const guess = (string: string) => {
+    //TODO: Implement guess logic
+  };
+
+  const updateCanvas = (canvas: Canvas) => {
+    socket.emit("UpdateCanvas", canvas);
+    updateState({ canvas });
+  };
+
   useEffect(() => {
     socket.on("RoomUpdate", (room) => {
       updateState({ room });
@@ -92,6 +105,7 @@ export function ClientStateProvider({
         ownPlayerId: socket.id as PlayerId,
         mainMenuFunctions: { joinRoom, createRoom },
         lobbyFunctions: { toggleReadyness },
+        gameFunctions: { guess, updateCanvas },
         toggleReadyness,
       }}
     >
