@@ -1,11 +1,10 @@
-import {RoomId} from "./Data/RoomId.js";
 import {Canvas} from "./Data/Canvas/Canvas.js";
-import {Player} from "./Data/Player.js";
 import {PlayerId} from "./Data/PlayerId.js";
 import {MessagePayload} from "./Data/Messages/MessagePayload.js";
+import {Room} from "./Data/Room.js";
 
 export interface ServerToClientEvents {
-  PlayerUpdate: (updatedPlayers : Player[]) => void;
+  RoomUpdate: (updatedRoom : Room) => void;
   Message: (message : MessagePayload) => void;
   UpdateCanvas: (Canvas : Canvas) => void;
 
@@ -18,8 +17,9 @@ export interface ServerToClientEvents {
 export interface ClientToServerEvents {
   test: (msg: string) => void;
 
-  CreateRoom: (callback: (roomId: RoomId) => void) => void;
-  JoinRoom: (roomId : RoomId) => void;
+  CreateRoom: (playerName : string, callback: (room: Room) => void) => void;
+  JoinRoom: (playerName : string, callback: (room: Room) => void) => void;
+
   SetReady: (newState: boolean) => void;
   Message: (message: string) => void;
   UpdateCanvas: (newCanvas: Canvas) => void;
