@@ -115,4 +115,38 @@
     flex: 0 0 clamp(8rem, 25dvh, 14rem);
     width: 100%;
   }
+
+  /*
+   * Guessing on mobile: the canvas gets as much space as possible, the chat
+   * takes the rest but never less than input + a few lines of messages.
+   * Sizing is done against the whole layout, so it also works when the
+   * keyboard is open and the visible height shrinks.
+   */
+  .guessing {
+    --chat-min-h: 7.5rem;
+
+    container-type: size;
+  }
+
+  .guessing .board {
+    --header-h: 2rem;
+
+    container-type: normal;
+    flex: none;
+  }
+
+  .guessing .stage {
+    --canvas-w: min(
+      100cqw,
+      (100cqh - var(--header-h) - var(--chat-min-h) - var(--gap) - 10px) *
+        var(--ratio)
+    );
+
+    flex: none;
+  }
+
+  .guessing .chat {
+    flex: 1 1 0;
+    min-height: var(--chat-min-h);
+  }
 }

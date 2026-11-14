@@ -84,9 +84,11 @@ export function Chat(props: ChatProps) {
         ))}
       </div>
       {!props.hideSend && (
-        <>
+        <Flex gap="10px" align="center">
           <input
             type="text"
+            enterKeyHint="send"
+            style={{ flex: 1, minWidth: 0 }}
             placeholder="Type a message..."
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
@@ -99,13 +101,14 @@ export function Chat(props: ChatProps) {
             autoFocus
           />
           <Button
+            keepFocus
             onClick={() => {
               sendMessage();
             }}
           >
             Send
           </Button>
-        </>
+        </Flex>
       )}
     </Flex>
   );

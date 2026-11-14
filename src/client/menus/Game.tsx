@@ -92,7 +92,9 @@ export function Game() {
           }
         }}
       >
-        <div className={styles.layout}>
+        <div
+          className={`${styles.layout} ${isActivePlayer ? "" : styles.guessing}`}
+        >
           <div
             className={`${styles.board} ${isActivePlayer ? "" : styles.noToolbar}`}
           >

@@ -3,14 +3,53 @@ import { useClientState as useClientState } from "./useClientState";
 import { RoomSelection } from "./menus/RoomSelection";
 import { Game } from "./menus/Game";
 import { Flex } from "./components/Flex";
+import { useEffect, useState } from "react";
+
+/**
+ * Height of the actually visible area. Shrinks when the on-screen keyboard
+ * opens (also on iOS, where dvh does not react to the keyboard).
+ */
+function useVisibleHeight() {
+  const [height, setHeight] = useState<number | undefined>(
+    () => window.visualViewport?.height,
+  );
+
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const update = () => {
+      // * scale so pinch-zooming doesn't shrink the layout, only the keyboard does
+      setHeight(vv.height * vv.scale);
+      // iOS pans the page to the focused input, undo that – our layout already fits
+      if (vv.scale === 1 && window.scrollY !== 0) window.scrollTo(0, 0);
+    };
+    vv.addEventListener("resize", update);
+    vv.addEventListener("scroll", update);
+    return () => {
+      vv.removeEventListener("resize", update);
+      vv.removeEventListener("scroll", update);
+    };
+  }, []);
+
+  return height;
+}
 
 export function App() {
   const { state } = useClientState();
+  const visibleHeight = useVisibleHeight();
+  const hideTitle =
+    state.state === "game" &&
+    visibleHeight !== undefined &&
+    visibleHeight < 600;
 
   return (
     <Flex
       direction="column"
-      style={{ width: "100%", height: "100dvh", overflow: "hidden" }}
+      style={{
+        width: "100%",
+        height: visibleHeight ? `${visibleHeight}px` : "100dvh",
+        overflow: "hidden",
+      }}
     >
       <h1
         style={{
@@ -20,6 +59,7 @@ export function App() {
           fontSize: "clamp(1rem, 4dvh, 2rem)",
           padding: "clamp(0.25rem, 2dvh, 1rem)",
           margin: "0 0 clamp(0.25rem, 2dvh, 1rem) 0",
+          display: hideTitle ? "none" : undefined,
         }}
       >
         It's not a Bird?!
