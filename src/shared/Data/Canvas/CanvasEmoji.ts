@@ -3,4 +3,6 @@ export type CanvasEmoji = {
   emojieId: string;
   PlacementX: number;
   PlacementY: number;
+  Scale: number;
+  Rotation: number;
 };
