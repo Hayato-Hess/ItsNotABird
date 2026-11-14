@@ -25,10 +25,11 @@ export function Game() {
 
           const { target } = event.operation;
 
-          const all = [...state.canvas.Emojis];
-          const emj = all.find(
+          let all = [...state.canvas.Emojis];
+          const prevIndex = all.findIndex(
             (e) => e.id === event.operation.source?.data?.id,
           );
+          const emj = prevIndex !== -1 ? all[prevIndex] : undefined;
 
           const dragged = event.operation.shape?.current.boundingRectangle;
 
@@ -65,9 +66,12 @@ export function Game() {
                 PlacementY: positionY,
               });
             } else {
-              console.log("Emoji found, updating position");
-              emj.PlacementX = positionX;
-              emj.PlacementY = positionY;
+              all.splice(prevIndex, 1);
+              all.push({
+                ...emj,
+                PlacementX: positionX,
+                PlacementY: positionY,
+              });
             }
 
             updateCanvas({ Emojis: all });
