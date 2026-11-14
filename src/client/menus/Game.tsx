@@ -79,13 +79,17 @@ export function Game() {
             <div style={{ padding: "0.5rem", border: "1px solid #fff" }}>
               {isActivePlayer ? (
                 <div>
-                  Your turn:{" "}
-                  <span style={{ color: "var(--color-primary)" }}>???</span>
+                  {state.wordToGuess?.category || "???"}:{" "}
+                  <span style={{ color: "var(--color-primary)" }}>
+                    {state.wordToGuess?.word || "???"}{" "}
+                  </span>
                 </div>
               ) : (
                 <div>
                   Category:{" "}
-                  <span style={{ color: "var(--color-primary)" }}>???</span>
+                  <span style={{ color: "var(--color-primary)" }}>
+                    {state.wordToGuess?.category || "???"}
+                  </span>
                 </div>
               )}
             </div>

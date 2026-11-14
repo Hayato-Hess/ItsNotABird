@@ -5,12 +5,14 @@ import { PlayerId } from "../shared/Data/PlayerId";
 import { type Canvas } from "../shared/Data/Canvas/Canvas";
 import { SharedRoom } from "../shared/Data/SharedRoom";
 import { toast } from "react-toastify";
+import { WordToGuess } from "../shared/Data/WordToGuess";
 
 export interface ClientState {
   state: "main" | "lobby" | "game";
   room?: SharedRoom;
   canvas: Canvas;
   messages: string[];
+  wordToGuess?: WordToGuess;
 }
 
 export const INITIAL_GAME_STATE: ClientState = {
@@ -105,8 +107,12 @@ export function ClientStateProvider({
     socket.on("RoomUpdate", (room) => {
       updateState({ room });
     });
-    socket.on("GameStart", () => {
-      updateState({ state: "game", canvas: { Emojis: [] } });
+    socket.on("GameStart", (newActivePlayer: PlayerId, category: string) => {
+      updateState({
+        state: "game",
+        canvas: { Emojis: [] },
+        wordToGuess: { word: "???", category: category },
+      });
     });
     socket.on("UpdateCanvas", (canvas) => {
       updateState({ canvas });
@@ -120,12 +126,16 @@ export function ClientStateProvider({
         messages: [...prev.messages, msg.message],
       }));
     });
+    socket.on("WordToGuess", (word) => {
+      updateState({ wordToGuess: word });
+    });
     return () => {
       socket.off("RoomUpdate");
       socket.off("GameStart");
       socket.off("UpdateCanvas");
       socket.off("GameEnd");
       socket.off("Message");
+      socket.off("WordToGuess");
     };
   }, [socket]);
 
