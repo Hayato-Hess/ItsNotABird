@@ -7,6 +7,8 @@ export type CanvasProps = {
   id: string;
   data: CanvasEmoji[];
   disableInteraction?: boolean;
+  selectedId?: string;
+  onSelect?: (id: string | undefined) => void;
 };
 
 export function Canvas(props: CanvasProps) {
@@ -30,6 +32,10 @@ export function Canvas(props: CanvasProps) {
             id={emoji.id}
             emojieId={emoji.emojieId}
             disableDrag={props.disableInteraction}
+            onSelect={() => {
+              props.onSelect?.(emoji.id);
+            }}
+            selected={props.selectedId === emoji.id}
           />
         </div>
       ))}

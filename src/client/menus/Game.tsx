@@ -1,5 +1,4 @@
-import { useMemo } from "react";
-import { Button } from "../components/Button";
+import { useEffect, useMemo, useState } from "react";
 import { Canvas } from "../components/Canvas";
 import { Chat } from "../components/Chat";
 import { EmojiToolbar } from "../components/EmojiToolbar";
@@ -17,6 +16,13 @@ export function Game() {
   }, [state, ownPlayerId]);
 
   const { updateCanvas, guess } = gameFunctions;
+  const [selectedEmojiId, setSelectedEmojiId] = useState<string | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    setSelectedEmojiId(undefined);
+  }, [isActivePlayer]);
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
@@ -61,22 +67,29 @@ export function Game() {
 
             if (!emj) {
               console.log("Emoji not found, adding new one");
+              const id = uuidv4();
               all.push({
-                id: uuidv4(),
+                id: id,
                 emojieId: event.operation.source?.data?.emojieId || "",
                 PlacementX: positionX,
                 PlacementY: positionY,
+                Scale: 1,
+                Rotation: 0,
               });
+              setSelectedEmojiId(id);
             } else {
               all.splice(prevIndex, 1);
               all.push({
                 ...emj,
                 PlacementX: positionX,
                 PlacementY: positionY,
+                Scale: emj.Scale,
+                Rotation: emj.Rotation,
               });
             }
 
             updateCanvas({ Emojis: all });
+            setSelectedEmojiId(emj?.id);
           }
         }}
       >
@@ -104,6 +117,8 @@ export function Game() {
               id="canvas"
               data={state.canvas.Emojis}
               disableInteraction={!isActivePlayer}
+              selectedId={selectedEmojiId}
+              onSelect={setSelectedEmojiId}
             />
             {isActivePlayer && <EmojiToolbar />}
           </div>

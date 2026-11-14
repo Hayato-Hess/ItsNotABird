@@ -22,6 +22,10 @@
   max-width: none !important;
 }
 
+.selected{
+  border: 1px dashed #fff;
+}
+
 .small {
   height: 4vh;
 }

@@ -20,9 +20,15 @@ const sensors = [
 export type DraggableEmojieProps = {
   id: string;
   emojieId: string;
+  scale?: number;
+  rotation?: number;
   ghost?: boolean;
   disableDrag?: boolean;
   small?: boolean;
+  selected?: boolean;
+  onSelect?: () => void;
+  onResize?: (newScale: number) => void;
+  onRotate?: (newRotatin: number) => void;
 };
 export const DraggableEmojie = (props: DraggableEmojieProps) => {
   const { ref, isDragging } = useDraggable({
@@ -42,13 +48,17 @@ export const DraggableEmojie = (props: DraggableEmojieProps) => {
   });
   return (
     <img
+      onClick={props.onSelect}
       ref={ref}
       key={props.emojieId}
       src={emojiUrl(props.emojieId)}
       alt={props.emojieId}
       draggable={false}
-      className={`${styles.emojie} ${props.small ? styles.small : ""}`}
-      style={{ opacity: props.ghost && isDragging ? 0.6 : 1 }}
+      className={`${styles.emojie} ${props.small ? styles.small : ""} ${props.selected ? styles.selected : ""}`}
+      style={{
+        opacity: props.ghost && isDragging ? 0.6 : 1,
+        transform: `scale(${props.scale ?? 1}) rotate(${props.rotation ?? 0}deg)`,
+      }}
     />
   );
 };
