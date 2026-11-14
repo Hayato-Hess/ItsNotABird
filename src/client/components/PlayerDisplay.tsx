@@ -1,14 +1,13 @@
-import { Player } from "../../shared/Data/Player";
-
+import { SharedPlayer } from "../../shared/Data/SharedPlayer";
 export type PlayerDisplayProps = {
-  player: Player;
+  player: SharedPlayer;
   isSelf?: boolean;
 };
 
 export function PlayerDisplay({ player, isSelf }: PlayerDisplayProps) {
   return (
     <div>
-      {player.Id}
+      {player.Name}
       {player.IsReady && " [Ready]"}
     </div>
   );

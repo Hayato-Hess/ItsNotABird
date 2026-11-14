@@ -2,12 +2,12 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { ClientToServerEvents, ServerToClientEvents } from "../shared/message";
 import { type Socket } from "socket.io-client";
 import { PlayerId } from "../shared/Data/PlayerId";
-import { Room } from "../shared/Data/Room";
-import { Canvas } from "../shared/Data/Canvas/Canvas";
+import { type Canvas } from "../shared/Data/Canvas/Canvas";
+import { SharedRoom } from "../shared/Data/SharedRoom";
 
 export interface ClientState {
   state: "main" | "lobby" | "game";
-  room?: Room;
+  room?: SharedRoom;
   canvas: Canvas;
 }
 
@@ -48,7 +48,7 @@ export function ClientStateProvider({
   };
 
   const joinRoom = (name: string, roomId: string) => {
-    socket.emit("JoinRoom", name, (room) => {
+    socket.emit("JoinRoom", name, roomId, (room) => {
       updateState({ state: "lobby", room });
     });
   };
@@ -57,9 +57,6 @@ export function ClientStateProvider({
     socket.emit("CreateRoom", name, (room) => {
       updateState({ state: "lobby", room });
     });
-
-    //TODO remove
-    updateState({ state: "game" });
   };
 
   const toggleReadyness = () => {
