@@ -1,20 +1,17 @@
-import { io, type Socket } from "socket.io-client";
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from "../shared/message";
-
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
+import { Lobby } from "./menus/Lobby";
+import { useClientState as useClientState } from "./useClientState";
+import { RoomSelection } from "./menus/RoomSelection";
+import { Game } from "./menus/Game";
 
 export function App() {
-  const test = () => {
-    socket.emit("test", "blub");
-  };
+  const { state } = useClientState();
 
   return (
-    <>
-      <div>Hello World</div>
-      <button onClick={test}>Send Blub</button>
-    </>
+    <div>
+      <h1>It's not a Bird?!</h1>
+      {state.state === "main" && <RoomSelection />}
+      {state.state === "lobby" && <Lobby />}
+      {state.state === "game" && <Game />}
+    </div>
   );
 }
