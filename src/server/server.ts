@@ -151,7 +151,7 @@ io.on("connection", (socket) => {
     } satisfies MessagePayload);
 
     if (room.game.isCorrectMessage(message) && player) {
-      handleCorrectMessageReceived(room, player);
+      handleCorrectMessageReceived(room, player, message);
       return;
     }
 
@@ -198,14 +198,14 @@ function sendGameEnd(room: Room) {
   io.to(room.id).emit("GameEnd");
 }
 
-function handleCorrectMessageReceived(room: Room, sender: Player) {
+function handleCorrectMessageReceived(room: Room, sender: Player, message: string) {
   room.game.correctMessageSent(sender.Id);
   sendRoomUpdate(room);
 
   io.to(room.id).emit("RoundEnd");
 
   io.to(room.id).emit("Message", {
-    message: "correct message received from: " + sender?.Name,
+    message: "correct guess '"+message+"' received from: " + sender?.Name,
     source: MessageSource.Server,
   } satisfies MessagePayload);
 
