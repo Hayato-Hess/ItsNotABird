@@ -8,8 +8,16 @@ export type ChatProps = {
 };
 
 export function Chat(props: ChatProps) {
-  const { state, gameFunctions, lobbyFunctions } = useClientState();
+  const { state, gameFunctions, lobbyFunctions, ownPlayerId } =
+    useClientState();
   const [msg, setMsg] = useState("");
+
+  const players = state.room?.players ?? [];
+  const isYou = (playerId: string) => playerId === ownPlayerId;
+  const getPlayerName = (playerId: string) => {
+    const player = players.find((p) => p.Id === playerId);
+    return player?.Name ?? playerId;
+  };
 
   const sendMessage = () => {
     if (msg == "") {
@@ -31,7 +39,18 @@ export function Chat(props: ChatProps) {
     >
       <div style={{ flex: 1, overflowY: "auto" }}>
         {state.messages.map((msg, index) => (
-          <div key={index}>{msg}</div>
+          <div key={index}>
+            {msg.sender && (
+              <span
+                style={{
+                  color: isYou(msg.sender) ? "var(--color-primary)" : "#999",
+                }}
+              >
+                {getPlayerName(msg.sender)}:{" "}
+              </span>
+            )}
+            {msg.message}
+          </div>
         ))}
       </div>
       {!props.hideSend && (
