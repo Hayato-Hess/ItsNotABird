@@ -93,8 +93,10 @@ export function Game() {
         }}
       >
         <div className={styles.layout}>
-          <div className={styles.board}>
-            <div className="box" style={{ padding: "0.5rem" }}>
+          <div
+            className={`${styles.board} ${isActivePlayer ? "" : styles.noToolbar}`}
+          >
+            <div className={`box ${styles.header}`}>
               {isActivePlayer ? (
                 <div>
                   {state.wordToGuess?.category || "???"}:{" "}
@@ -111,29 +113,36 @@ export function Game() {
                 </div>
               )}
             </div>
-
-            <Canvas
-              id="canvas"
-              data={state.canvas.Emojis}
-              disableInteraction={!isActivePlayer}
-              selectedId={selectedEmojiId}
-              onSelect={setSelectedEmojiId}
-              onEmojyChange={(id, newScale, newRotation) => {
-                const emojiIndex = state.canvas.Emojis.findIndex(
-                  (e) => e.id === id,
-                );
-                if (emojiIndex !== -1) {
-                  const updatedEmojis = [...state.canvas.Emojis];
-                  updatedEmojis[emojiIndex] = {
-                    ...updatedEmojis[emojiIndex],
-                    Scale: newScale,
-                    Rotation: newRotation,
-                  };
-                  updateCanvas({ Emojis: updatedEmojis });
-                }
-              }}
-            />
-            {isActivePlayer && <EmojiToolbar />}
+            <div className={styles.stage}>
+              <div className={styles.canvasSlot}>
+                <Canvas
+                  id="canvas"
+                  data={state.canvas.Emojis}
+                  disableInteraction={!isActivePlayer}
+                  selectedId={selectedEmojiId}
+                  onSelect={setSelectedEmojiId}
+                  onEmojyChange={(id, newScale, newRotation) => {
+                    const emojiIndex = state.canvas.Emojis.findIndex(
+                      (e) => e.id === id,
+                    );
+                    if (emojiIndex !== -1) {
+                      const updatedEmojis = [...state.canvas.Emojis];
+                      updatedEmojis[emojiIndex] = {
+                        ...updatedEmojis[emojiIndex],
+                        Scale: newScale,
+                        Rotation: newRotation,
+                      };
+                      updateCanvas({ Emojis: updatedEmojis });
+                    }
+                  }}
+                />
+              </div>
+              {isActivePlayer && (
+                <div className={styles.toolbarSlot}>
+                  <EmojiToolbar />
+                </div>
+              )}
+            </div>
           </div>
           <div className={styles.chat}>
             <Chat hideSend={isActivePlayer} />

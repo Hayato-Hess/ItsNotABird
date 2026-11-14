@@ -1,15 +1,10 @@
 .toolbar {
-  width: 100%;
-  flex-grow: 1;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
   overflow-y: auto;
   align-content: flex-start;
   background: #484646;
   border: var(--border);
-  margin-top: 0.5rem;
-  padding:10px;
-}
-@media (max-width: 768px) {
-  .toolbar {
-    margin-top: 10px;
-  }
+  padding: 10px;
 }

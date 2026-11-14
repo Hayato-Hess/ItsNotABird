@@ -75,7 +75,7 @@ export function Chat(props: ChatProps) {
                     ? "rgb(101, 193, 229)"
                     : undefined,
                 fontSize:
-                  msg.source === MessageSource.Server ? "0.5rem" : undefined,
+                  msg.source === MessageSource.Server ? "0.7rem" : undefined,
               }}
             >
               {msg.message}
