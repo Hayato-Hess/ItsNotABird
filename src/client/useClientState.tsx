@@ -1,17 +1,22 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { ClientToServerEvents, ServerToClientEvents } from "../shared/message";
 import { type Socket } from "socket.io-client";
+import { Player } from "../shared/Data/Player";
+import { PlayerId } from "../shared/Data/PlayerId";
 
 export interface ClientState {
   state: "main" | "lobby" | "game";
+  players: Player[];
 }
 
 export const INITIAL_GAME_STATE: ClientState = {
   state: "main",
+  players: [],
 };
 
 const ClientStateContext = createContext<{
   state: ClientState;
+  ownPlayerId: PlayerId;
   mainMenuFunctions: {
     joinRoom: (name: string, roomId: string) => void;
     createRoom: (name: string) => void;
@@ -40,15 +45,18 @@ export function ClientStateProvider({
   };
 
   const joinRoom = (name: string, roomId: string) => {
-    //TODO websocket stuff
+    socket.emit("JoinRoom", name, (roomId) => {});
     updateState({ state: "lobby" });
   };
   const createRoom = (name: string) => {
-    //TODO websocket stuff
-    updateState({ state: "lobby" });
+    socket.emit("CreateRoom", name, (room) => {
+      console.log("Created room with ID:", room);
+      updateState({ state: "lobby" });
+    });
   };
 
   const toggleReadyness = () => {
+    socket.emit("SetReady", true);
     //TODO websocket stuff
     updateState({ state: "game" });
   };
@@ -66,6 +74,7 @@ export function ClientStateProvider({
     <ClientStateContext.Provider
       value={{
         state,
+        ownPlayerId: socket.id as PlayerId,
         mainMenuFunctions: { joinRoom, createRoom },
         lobbyFunctions: { toggleReadyness },
         toggleReadyness,

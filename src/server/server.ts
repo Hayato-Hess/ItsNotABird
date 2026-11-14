@@ -18,9 +18,6 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents>(http);
 
 io.on("connection", (socket) => {
   console.log("connected", socket.id);
-  socket.on("test", (msg) => {
-    console.log(msg);
-  });
 });
 
 http.listen(PORT, "0.0.0.0", () => {

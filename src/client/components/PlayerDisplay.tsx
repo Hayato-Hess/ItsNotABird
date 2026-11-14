@@ -1,7 +1,15 @@
+import { Player } from "../../shared/Data/Player";
+
 export type PlayerDisplayProps = {
-  name: string;
+  player: Player;
+  isSelf?: boolean;
 };
 
-export function PlayerDisplay(props: PlayerDisplayProps) {
-  return <div>{props.name}</div>;
+export function PlayerDisplay({ player, isSelf }: PlayerDisplayProps) {
+  return (
+    <div>
+      {player.Id}
+      {player.IsReady && " [Ready]"}
+    </div>
+  );
 }
