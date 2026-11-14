@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useClientState } from "../useClientState";
 import { Button } from "./Button";
 import { Flex } from "./Flex";
+import { MessageSource } from "../../shared/Data/Messages/MessageSource";
 
 export type ChatProps = {
   hideSend?: boolean;
@@ -49,7 +50,16 @@ export function Chat(props: ChatProps) {
                 {getPlayerName(msg.sender)}:{" "}
               </span>
             )}
-            {msg.message}
+            <span
+              style={{
+                color:
+                  msg.source === MessageSource.Server
+                    ? "rgb(101, 193, 229)"
+                    : undefined,
+              }}
+            >
+              {msg.message}
+            </span>
           </div>
         ))}
       </div>
