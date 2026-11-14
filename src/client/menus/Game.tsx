@@ -2,8 +2,8 @@ import { Button } from "../components/Button";
 import { Canvas } from "../components/Canvas";
 import { Chat } from "../components/Chat";
 import { EmojiToolbar } from "../components/EmojiToolbar";
-import { Flex } from "../components/Flex";
 import { useClientState } from "../useClientState";
+import styles from "./Game.module.css";
 import { DragDropProvider } from "@dnd-kit/react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -14,7 +14,6 @@ export function Game() {
 
   return (
     <div>
-      <h2>Games [{state.room?.id}]</h2>
       <DragDropProvider
         onDragEnd={(event) => {
           if (event.canceled) return;
@@ -70,13 +69,15 @@ export function Game() {
           }
         }}
       >
-        <Flex gap="10px">
-          <div style={{ height: "100%" }}>
+        <div className={styles.layout}>
+          <div className={styles.board}>
             <Canvas id="canvas" data={state.canvas.Emojis} />
             <EmojiToolbar />
           </div>
-          <Chat />
-        </Flex>
+          <div className={styles.chat}>
+            <Chat />
+          </div>
+        </div>
       </DragDropProvider>
     </div>
   );

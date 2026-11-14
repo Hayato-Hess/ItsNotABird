@@ -1,0 +1,34 @@
+.layout {
+  display: flex;
+  gap: 10px;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.chat > * {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .board {
+    align-items: center;
+    width: 100%;
+  }
+
+  .chat {
+    width: 100%;
+  }
+}

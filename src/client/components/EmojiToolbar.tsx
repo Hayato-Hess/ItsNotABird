@@ -5,7 +5,7 @@ import { Flex } from "./Flex";
 
 export function EmojiToolbar() {
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <Flex
         wrap
         gap="10px"
