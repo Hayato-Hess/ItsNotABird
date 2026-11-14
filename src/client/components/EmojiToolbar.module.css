@@ -1,12 +1,11 @@
 .toolbar {
-  min-height: 15vh;
   width: 100%;
   flex-grow: 1;
   overflow-y: auto;
   align-content: flex-start;
   background: #484646;
   border: 1px solid #fff;
-  margin-top: 2rem;
+  margin-top: 0.5rem;
 }
 @media (max-width: 768px) {
   .toolbar {

@@ -22,6 +22,7 @@ export type DraggableEmojieProps = {
   emojieId: string;
   ghost?: boolean;
   disableDrag?: boolean;
+  small?: boolean;
 };
 export const DraggableEmojie = (props: DraggableEmojieProps) => {
   const { ref, isDragging } = useDraggable({
@@ -46,7 +47,7 @@ export const DraggableEmojie = (props: DraggableEmojieProps) => {
       src={emojiUrl(props.emojieId)}
       alt={props.emojieId}
       draggable={false}
-      className={styles.emojie}
+      className={`${styles.emojie} ${props.small ? styles.small : ""}`}
       style={{ opacity: props.ghost && isDragging ? 0.6 : 1 }}
     />
   );

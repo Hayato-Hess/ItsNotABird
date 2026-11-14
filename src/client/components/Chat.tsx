@@ -41,6 +41,13 @@ export function Chat(props: ChatProps) {
             placeholder="Type a message..."
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                sendMessage();
+              }
+            }}
+            autoFocus
           />
           <Button
             onClick={() => {
