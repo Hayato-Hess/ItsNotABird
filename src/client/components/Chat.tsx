@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useClientState } from "../useClientState";
 import { Button } from "./Button";
 import { Flex } from "./Flex";
@@ -12,6 +12,15 @@ export function Chat(props: ChatProps) {
   const { state, gameFunctions, lobbyFunctions, ownPlayerId } =
     useClientState();
   const [msg, setMsg] = useState("");
+  const messagesRef = useRef<HTMLDivElement>(null);
+  const stickToBottom = useRef(true);
+
+  useEffect(() => {
+    const el = messagesRef.current;
+    if (el && stickToBottom.current) {
+      el.scrollTop = el.scrollHeight;
+    }
+  }, [state.messages.length]);
 
   const players = state.room?.players ?? [];
   const isYou = (playerId: string) => playerId === ownPlayerId;
@@ -36,9 +45,18 @@ export function Chat(props: ChatProps) {
     <Flex
       direction="column"
       gap="10px"
-      style={{ border: "1px solid white", padding: "10px" }}
+      className="box"
+      style={{ padding: "10px" }}
     >
-      <div style={{ flex: 1, overflowY: "auto" }}>
+      <div
+        ref={messagesRef}
+        style={{ flex: 1, minHeight: 0, overflowY: "auto" }}
+        onScroll={(e) => {
+          const el = e.currentTarget;
+          stickToBottom.current =
+            el.scrollHeight - el.scrollTop - el.clientHeight < 30;
+        }}
+      >
         {state.messages.map((msg, index) => (
           <div key={index}>
             {msg.sender && (
@@ -56,6 +74,8 @@ export function Chat(props: ChatProps) {
                   msg.source === MessageSource.Server
                     ? "rgb(101, 193, 229)"
                     : undefined,
+                fontSize:
+                  msg.source === MessageSource.Server ? "0.5rem" : undefined,
               }}
             >
               {msg.message}
