@@ -38,3 +38,10 @@ button {
   border: 1px solid #fff !important;
   border-radius: 0 !important;
 }
+
+input {
+  height: 30px;
+  font-family: var(--font-pixel);
+  font-size: 14px;
+  padding: 4px;
+}
