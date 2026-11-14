@@ -18,6 +18,7 @@ export function EmojiToolbar() {
           id={"new_" + emoji}
           emojieId={emoji}
           ghost
+          small
         />
       ))}
     </Flex>
