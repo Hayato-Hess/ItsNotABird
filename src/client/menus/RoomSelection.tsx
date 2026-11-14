@@ -9,7 +9,13 @@ export function RoomSelection() {
   const [roomCode, setRoomCode] = useState("");
 
   return (
-    <div>
+    <div
+      style={{
+        width: "100%",
+        border: "1px solid #fff",
+        padding: "var(--padding-md)",
+      }}
+    >
       <InputField label="Name" value={name} onChange={setName} />
       <InputField label="Room Code" value={roomCode} onChange={setRoomCode} />
       <Button onClick={() => mainMenuFunctions.joinRoom(name, roomCode)}>

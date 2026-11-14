@@ -1,17 +1,20 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { ClientToServerEvents, ServerToClientEvents } from "../shared/message";
 import { type Socket } from "socket.io-client";
-import { Player } from "../shared/Data/Player";
 import { PlayerId } from "../shared/Data/PlayerId";
+import { Room } from "../shared/Data/Room";
+import { Canvas } from "../shared/Data/Canvas/Canvas";
 
 export interface ClientState {
   state: "main" | "lobby" | "game";
-  players: Player[];
+  room?: Room;
+  canvas: Canvas;
 }
 
 export const INITIAL_GAME_STATE: ClientState = {
   state: "main",
-  players: [],
+  room: undefined,
+  canvas: { Emojis: [] },
 };
 
 const ClientStateContext = createContext<{
@@ -45,28 +48,43 @@ export function ClientStateProvider({
   };
 
   const joinRoom = (name: string, roomId: string) => {
-    socket.emit("JoinRoom", name, (roomId) => {});
-    updateState({ state: "lobby" });
+    socket.emit("JoinRoom", name, (room) => {
+      updateState({ state: "lobby", room });
+    });
   };
   const createRoom = (name: string) => {
+    console.log("Creating room with name:", name);
     socket.emit("CreateRoom", name, (room) => {
-      console.log("Created room with ID:", room);
-      updateState({ state: "lobby" });
+      updateState({ state: "lobby", room });
     });
+
+    //TODO remove
+    updateState({ state: "game" });
   };
 
   const toggleReadyness = () => {
     socket.emit("SetReady", true);
-    //TODO websocket stuff
     updateState({ state: "game" });
   };
 
   useEffect(() => {
-    //socket.on("test", (message) => {
-    //  console.log(message);
-    //});
+    socket.on("RoomUpdate", (room) => {
+      updateState({ room });
+    });
+    socket.on("GameStart", () => {
+      updateState({ state: "game", canvas: { Emojis: [] } });
+    });
+    socket.on("UpdateCanvas", (canvas) => {
+      updateState({ canvas });
+    });
+    socket.on("GameEnd", () => {
+      updateState({ state: "lobby" });
+    });
     return () => {
-      //socket.off("test");
+      socket.off("RoomUpdate");
+      socket.off("GameStart");
+      socket.off("UpdateCanvas");
+      socket.off("GameEnd");
     };
   }, [socket]);
 

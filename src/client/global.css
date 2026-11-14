@@ -11,6 +11,7 @@
   --color-secondary: #2a3d37;
   --color-text: #f5f5f7;
   --font-pixel: "Press Start 2P", monospace;
+  --padding-md: 2rem;
 }
 
 *,
