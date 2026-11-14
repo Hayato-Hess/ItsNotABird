@@ -32,7 +32,9 @@ export function Rules() {
           </p>
           <p>
             <div>Programming:</div>
-            <div>- Hayato</div>
+            <div>
+              - Hayato <a href="https://TehYato.itch.io/">[TehYato]</a>
+            </div>
             <div>
               - Marian <a href="https://theras.itch.io/">[Theras]</a>
             </div>
