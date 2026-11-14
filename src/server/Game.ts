@@ -3,7 +3,7 @@ import {Canvas} from "../shared/Data/Canvas/Canvas.js";
 import {Room} from "./Data/Room.js";
 import {GameState} from "../shared/Data/GameState.js";
 import {PlayerId} from "../shared/Data/PlayerId.js";
-import {allWordList} from "./Data/AllWordList.js";
+import { distance, closest } from 'fastest-levenshtein';
 
 export class Game {
     private _gameData: GameData;
@@ -49,6 +49,20 @@ export class Game {
         word = word?.trim();
 
         return word === message;
+    }
+
+    getLevenshteinDistanceToSearchedWord(message:string) : number | undefined {
+        message = message.toLowerCase();
+        message = message.trim();
+
+        let word = this._gameData.currentSearchedWord?.word;
+        word = word?.toLocaleLowerCase();
+        word = word?.trim();
+        if(!word){
+            return -1;
+        }
+
+        return distance(message, word);
     }
 
     correctMessageSent(sender: PlayerId) : number {

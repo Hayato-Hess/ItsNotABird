@@ -150,6 +150,15 @@ io.on("connection", (socket) => {
 
     if (room.game.isCorrectMessage(message) && player) {
       handleCorrectMessageReceived(room, player);
+      return;
+    }
+
+    let distanceToSearchedWord = room.game.getLevenshteinDistanceToSearchedWord(message);
+    if(distanceToSearchedWord && distanceToSearchedWord < 3 && player){
+      player.Socket.emit("Message", {
+        message: "Close Guess! (Distance: "+distanceToSearchedWord+")",
+        source: MessageSource.Server
+      })
     }
   });
 });
