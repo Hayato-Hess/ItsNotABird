@@ -7,6 +7,19 @@
   -webkit-user-select: none;
   -webkit-touch-callout: none;
   -webkit-user-drag: none;
+  cursor: pointer;
+}
+
+.small {
+  height: 4vh;
+}
+
+.emojie[data-dnd-dragging] {
+  height: 7.2vh !important;
+  width: 7.2vh !important;
+  border: 1px dashed #fff;
+  max-height: none !important;
+  max-width: none !important;
 }
 
 .small {
