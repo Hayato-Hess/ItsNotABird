@@ -1,6 +1,4 @@
-import { useEffect, useRef } from "react";
 import { CanvasEmoji } from "../../shared/Data/Canvas/CanvasEmoji";
-import { emojiUrl } from "../emojies/emojies";
 import styles from "./Canvas.module.css";
 import { useDroppable } from "@dnd-kit/react";
 import { DraggableEmojie } from "./DraggableEmojie";
@@ -11,8 +9,6 @@ export type CanvasProps = {
 };
 
 export function Canvas(props: CanvasProps) {
-  const canvas = useRef<HTMLCanvasElement | null>(null);
-
   const { ref } = useDroppable({
     id: props.id,
   });
@@ -28,10 +24,7 @@ export function Canvas(props: CanvasProps) {
             top: emoji.PlacementY,
           }}
         >
-          <DraggableEmojie
-            id={emoji.id}
-            emojieId={emoji.emojieId}
-          />
+          <DraggableEmojie id={emoji.id} emojieId={emoji.emojieId} />
         </div>
       ))}
     </div>

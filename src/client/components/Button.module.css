@@ -1,3 +1,13 @@
 .gameButton {
-  background: var(--color-primary);
+  background: none;
+  border-style: solid;
+  border-width: 12px;
+  border-image: url("/button.png") 4 fill / 12px stretch;
+  image-rendering: pixelated;
+  padding: 0 8px 3px;
+}
+
+.gameButton:active {
+  border-image-source: url("/button-pressed.png");
+  padding: 3px 8px 0;
 }

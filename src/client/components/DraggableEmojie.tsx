@@ -1,3 +1,4 @@
+import styles from "./DraggableEmojie.module.css";
 import { emojiUrl } from "../emojies/emojies";
 import { useDraggable } from "@dnd-kit/react";
 import { Feedback } from "@dnd-kit/dom";
@@ -32,6 +33,7 @@ export const DraggableEmojie = ({
       key={emojieId}
       src={emojiUrl(emojieId)}
       alt={emojieId}
+      className={styles.emojie}
       style={{ opacity: ghost && isDragging ? 0.6 : 1 }}
     />
   );
