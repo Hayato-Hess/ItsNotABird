@@ -9,15 +9,27 @@ import {
 } from "@dnd-kit/dom";
 import { useEffect, useRef, useState } from "react";
 
+const isHandle = (event: PointerEvent) =>
+  event.target instanceof Element && !!event.target.closest("[data-handle]");
+
 const sensors = [
   PointerSensor.configure({
     activationConstraints: [
       new PointerActivationConstraints.Distance({ value: 5 }),
     ],
-    preventActivation: (event) =>
-      event.target instanceof Element && !!event.target.closest("[data-handle]"),
+    preventActivation: isHandle,
   }),
   KeyboardSensor,
+];
+
+const mouseOnlySensors = [
+  PointerSensor.configure({
+    activationConstraints: [
+      new PointerActivationConstraints.Distance({ value: 5 }),
+    ],
+    preventActivation: (event) =>
+      event.pointerType !== "mouse" || isHandle(event),
+  }),
 ];
 
 export type DraggableEmojieProps = {
@@ -27,6 +39,7 @@ export type DraggableEmojieProps = {
   rotation?: number;
   ghost?: boolean;
   disableDrag?: boolean;
+  mouseDragOnly?: boolean;
   small?: boolean;
   selected?: boolean;
   onSelect?: () => void;
@@ -41,7 +54,7 @@ export const DraggableEmojie = (props: DraggableEmojieProps) => {
       emojieId: props.emojieId,
     },
     disabled: props.disableDrag,
-    sensors,
+    sensors: props.mouseDragOnly ? mouseOnlySensors : sensors,
     plugins: [
       Feedback.configure({
         feedback: props.ghost ? "clone" : "default",
@@ -107,7 +120,7 @@ export const DraggableEmojie = (props: DraggableEmojieProps) => {
   return (
     <div
       ref={ref}
-      className={`${styles.emojie} ${props.small ? styles.small : ""}`}
+      className={`${styles.emojie} ${props.small ? styles.small : ""} ${props.mouseDragOnly ? styles.mouseDragOnly : ""}`}
     >
       <img
         onClick={props.onSelect}

@@ -20,6 +20,21 @@ export function Game() {
     undefined,
   );
 
+  const spawnEmoji = (emoji: string) => {
+    const id = uuidv4();
+    const all = [...state.canvas.Emojis];
+    all.push({
+      id,
+      emojieId: emoji,
+      PlacementX: 50,
+      PlacementY: 50,
+      Scale: 1,
+      Rotation: 0,
+    });
+    updateCanvas({ Emojis: all });
+    setSelectedEmojiId(id);
+  };
+
   useEffect(() => {
     setSelectedEmojiId(undefined);
   }, [isActivePlayer]);
@@ -141,7 +156,7 @@ export function Game() {
               </div>
               {isActivePlayer && (
                 <div className={styles.toolbarSlot}>
-                  <EmojiToolbar />
+                  <EmojiToolbar onClick={spawnEmoji} />
                 </div>
               )}
             </div>

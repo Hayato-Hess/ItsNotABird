@@ -11,6 +11,10 @@
   cursor: pointer;
 }
 
+.mouseDragOnly {
+  touch-action: manipulation;
+}
+
 .small {
   height: 4vh;
 }
