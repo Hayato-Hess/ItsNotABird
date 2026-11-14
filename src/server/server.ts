@@ -9,6 +9,8 @@ import {Room} from "./Data/Room.js";
 import {Player} from "./Data/Player.js";
 import {PlayerId} from "../shared/Data/PlayerId.js";
 import {GameState} from "../shared/Data/GameState.js";
+import {MessagePayload} from "../shared/Data/Messages/MessagePayload.js";
+import {MessageSource} from "../shared/Data/Messages/MessageSource.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
 
@@ -20,7 +22,6 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents>(http);
 
 const roomMap =  new Map<RoomId, Room>();
 const roomMembership =  new Map<PlayerId, RoomId>();
-
 
 io.on("connection", (socket) => {
   console.log("connected", socket.id);
@@ -71,9 +72,8 @@ io.on("connection", (socket) => {
     }
 
     io.to(room.id).emit("RoomUpdate", room.toSharedRoom());
-
     if(game.getGameData().gameState == GameState.Started){
-      io.to(room.id).emit("GameStart", <PlayerId> game.getGameData().currentActivePlayer)
+      sendGameStart(room);
     }
   });
 
@@ -91,6 +91,20 @@ io.on("connection", (socket) => {
     io.to(room.id).emit("UpdateCanvas", canvas);
   });
 
+  socket.on("Message", (message) => {
+    const playerId : PlayerId = socket.id;
+    let player = findPlayer(playerId);
+    const room = findRoom(playerId);
+
+    io.to(room.id).emit("Message", {
+      message: player?.Name + ": " + message,
+      source: MessageSource.Server,
+    } satisfies MessagePayload);
+
+    if(room.game.isCorrectMessage(message) && player){
+      handleCorrectMessageReceived(room, player);
+    }
+  });
 });
 
 http.listen(PORT, "0.0.0.0", () => {
@@ -103,6 +117,45 @@ http.listen(PORT, "0.0.0.0", () => {
   }
 });
 
+function sendGameStart(room: Room) {
+  let newActivePlayer = <PlayerId>room.game.getGameData().currentActivePlayer;
+  let player = findPlayer(newActivePlayer);
+
+  io.to(room.id).emit("Message", {
+    message: "starting new round - active player: " + player?.Name,
+    source: MessageSource.Server,
+  } satisfies MessagePayload);
+
+  io.to(room.id).emit("GameStart", newActivePlayer);
+}
+
+function sendGameEnd(room: Room) {
+  io.to(room.id).emit("Message", {
+    message: "game ended",
+    source: MessageSource.Server,
+  } satisfies MessagePayload);
+
+  io.to(room.id).emit("GameEnd");
+}
+
+function handleCorrectMessageReceived(room: Room, sender : Player) {
+  room.game.correctMessageSent(sender.Id);
+  io.to(room.id).emit("RoomUpdate", room.toSharedRoom());
+
+  io.to(room.id).emit("RoundEnd");
+
+  io.to(room.id).emit("Message", {
+    message: "correct message received from: " + sender?.Name,
+    source: MessageSource.Server,
+  } satisfies MessagePayload);
+
+  if (room.game.getGameData().gameState == GameState.GameEnd) {
+    sendGameEnd(room);
+  } else {
+    sendGameStart(room);
+  }
+}
+
 function findRoom(playerId: string) : Room {
   const roomId: RoomId | undefined = roomMembership.get(playerId);
   if (!roomId) {
@@ -110,4 +163,9 @@ function findRoom(playerId: string) : Room {
   }
 
   return <Room>roomMap.get(roomId);
+}
+
+function findPlayer(playerId : PlayerId) : Player | undefined {
+  let room = findRoom(playerId);
+  return room.players.find(value => value.Id == playerId);
 }
