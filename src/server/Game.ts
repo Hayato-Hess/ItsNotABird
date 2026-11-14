@@ -1,13 +1,17 @@
-import {GameState} from "./Data/GameState.js";
+import {GameData} from "./Data/GameData.js";
 import {Canvas} from "../shared/Data/Canvas/Canvas.js";
+import {Room} from "./Data/Room.js";
+import {GameState} from "../shared/Data/GameState.js";
 
 export class Game {
-    private gameState: GameState;
+    private _gameData: GameData;
     private _canvas : Canvas;
+    private _parent : Room;
 
-    constructor() {
-        this.gameState = new GameState();
+    constructor(room : Room) {
+        this._gameData = new GameData();
         this._canvas = {Emojis : []};
+        this._parent = room;
     }
 
     public updateCanvas(canvas : Canvas) : void {
@@ -18,5 +22,10 @@ export class Game {
         return this._canvas;
     }
 
-    getGameState = (): GameState => this.gameState;
+    getGameData = (): GameData => this._gameData;
+
+    start() {
+        this._gameData.currentActivePlayer = this._parent.players[Math.random() * this._parent.players.length].Id
+        this._gameData.gameState = GameState.Started;
+    }
 }

@@ -1,17 +1,14 @@
-import { createServer } from "node:http";
-import { networkInterfaces } from "node:os";
-import { fileURLToPath } from "node:url";
+import {createServer} from "node:http";
+import {networkInterfaces} from "node:os";
+import {fileURLToPath} from "node:url";
 import express from "express";
-import { Server } from "socket.io";
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from "../shared/message.js";
+import {Server} from "socket.io";
+import type {ClientToServerEvents, ServerToClientEvents,} from "../shared/message.js";
 import {RoomId} from "../shared/Data/RoomId.js";
-import {SharedPlayer} from "../shared/Data/SharedPlayer.js";
 import {Room} from "./Data/Room.js";
 import {Player} from "./Data/Player.js";
 import {PlayerId} from "../shared/Data/PlayerId.js";
+import {GameState} from "../shared/Data/GameState.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
 
@@ -58,22 +55,40 @@ io.on("connection", (socket) => {
     callback(room.toSharedRoom());
   });
 
-  socket.on("UpdateCanvas",  (canvas) => {
+  socket.on("SetReady", newState => {
     const playerId : PlayerId = socket.id;
-    const roomId: RoomId | undefined = roomMembership.get(playerId);
-    if(!roomId){
-      throw new Error("Room not found")
+    const room = findRoom(playerId);
+
+    const player = room.players.find(p=>p.Id == playerId)
+    if(!player){
+      throw new Error("Player not found")
+    }
+    player.IsReady = newState;
+
+    let game = room.game;
+    if(room.allPlayersReady()){
+      game.start();
     }
 
-    const room = roomMap.get(roomId);
-    if(room?.game.getGameState().currentActivePlayer != playerId){
+    io.to(room.id).emit("RoomUpdate", room.toSharedRoom());
+
+    if(game.getGameData().gameState == GameState.Started){
+      io.to(room.id).emit("GameStart", <PlayerId> game.getGameData().currentActivePlayer)
+    }
+  });
+
+  socket.on("UpdateCanvas",  (canvas) => {
+    const playerId : PlayerId = socket.id;
+    const room = findRoom(playerId);
+
+    if(room?.game.getGameData().currentActivePlayer != playerId){
       console.log("a non active player is updating the canvas")
       //throw new Error("Not the active player!") // todo
     }
 
     room?.game.updateCanvas(canvas);
 
-    io.to(roomId).emit("UpdateCanvas", canvas);
+    io.to(room.id).emit("UpdateCanvas", canvas);
   });
 
 });
@@ -87,3 +102,12 @@ http.listen(PORT, "0.0.0.0", () => {
     }
   }
 });
+
+function findRoom(playerId: string) : Room {
+  const roomId: RoomId | undefined = roomMembership.get(playerId);
+  if (!roomId) {
+    throw new Error("Room not found")
+  }
+
+  return <Room>roomMap.get(roomId);
+}

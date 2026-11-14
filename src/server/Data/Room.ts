@@ -11,17 +11,26 @@ export class Room {
     constructor(RoomId: RoomId) {
         this.id = RoomId;
         this.players = [];
-        this.game = new Game();
+        this.game = new Game(this);
     }
 
     public join(newPlayer: Player) {
         this.players.push(newPlayer);
     }
 
+    public allPlayersReady() : boolean {
+        for (const player of this.players) {
+            if(!player.IsReady) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public toSharedRoom() : SharedRoom{
         return {
             id : this.id,
-            gameState : this.game.getGameState().toSharedGameState(),
+            gameState : this.game.getGameData().toSharedGameData(),
             players : this.players.map(player => player.toSharedPlayer())
         };
     }
