@@ -2,6 +2,7 @@ import { useState } from "react";
 import { InputField } from "../components/InputField";
 import { useClientState } from "../useClientState";
 import { Button } from "../components/Button";
+import { Flex } from "../components/Flex";
 
 export function RoomSelection() {
   const { mainMenuFunctions } = useClientState();
@@ -17,12 +18,13 @@ export function RoomSelection() {
       }}
     >
       <InputField label="Name" value={name} onChange={setName} />
+
+      <Button onClick={() => mainMenuFunctions.createRoom(name)}>
+        Create Room
+      </Button>
       <InputField label="Room Code" value={roomCode} onChange={setRoomCode} />
       <Button onClick={() => mainMenuFunctions.joinRoom(name, roomCode)}>
         Join Room
-      </Button>
-      <Button onClick={() => mainMenuFunctions.createRoom(name)}>
-        Create Room
       </Button>
     </div>
   );

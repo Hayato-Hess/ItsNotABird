@@ -8,6 +8,7 @@ export function InputField(props: InputFieldProps) {
   return (
     <div>
       {props.label && <label>{props.label}</label>}
+      <br />
       <input
         type="text"
         value={props.value}
