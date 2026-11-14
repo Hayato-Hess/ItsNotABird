@@ -1,4 +1,5 @@
 import { SharedPlayer } from "../../shared/Data/SharedPlayer";
+import { Flex } from "./Flex";
 export type PlayerDisplayProps = {
   player: SharedPlayer;
   isSelf?: boolean;
@@ -6,9 +7,11 @@ export type PlayerDisplayProps = {
 
 export function PlayerDisplay({ player, isSelf }: PlayerDisplayProps) {
   return (
-    <div>
-      {player.Name}
-      {player.IsReady && " [Ready]"}
-    </div>
+    <Flex>
+      <div style={{ flexGrow: 1 }}>{player.Name}</div>
+      {player.IsReady && (
+        <div style={{ color: "var(--color-primary)" }}>[Ready]</div>
+      )}
+    </Flex>
   );
 }

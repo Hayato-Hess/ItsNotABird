@@ -76,6 +76,20 @@ export function Game() {
       >
         <div className={styles.layout}>
           <div className={styles.board}>
+            <div style={{ padding: "0.5rem", border: "1px solid #fff" }}>
+              {isActivePlayer ? (
+                <div>
+                  Your turn:{" "}
+                  <span style={{ color: "var(--color-primary)" }}>???</span>
+                </div>
+              ) : (
+                <div>
+                  Category:{" "}
+                  <span style={{ color: "var(--color-primary)" }}>???</span>
+                </div>
+              )}
+            </div>
+
             <Canvas
               id="canvas"
               data={state.canvas.Emojis}
