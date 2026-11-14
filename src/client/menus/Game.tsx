@@ -14,7 +14,7 @@ export function Game() {
 
   return (
     <div>
-      <h2>Games</h2>
+      <h2>Games [{state.room?.id}]</h2>
       <DragDropProvider
         onDragEnd={(event) => {
           if (event.canceled) return;
