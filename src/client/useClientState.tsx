@@ -55,27 +55,30 @@ export function ClientStateProvider({
   };
 
   const joinRoom = (name: string, roomId: string) => {
-    socket.emit("JoinRoom", name, roomId, (room) => {
-      updateState({ state: "lobby", room });
+    socket.emit("JoinRoom", name, roomId, (response) => {
+      if (response.success) {
+        updateState({ state: "lobby", room: response.data });
+      }
     });
   };
   const createRoom = (name: string) => {
-    console.log("Creating room with name:", name);
-    socket.emit("CreateRoom", name, (room) => {
-      updateState({ state: "lobby", room });
+    socket.emit("CreateRoom", name, (response) => {
+      if (response.success) {
+        updateState({ state: "lobby", room: response.data });
+      }
     });
   };
 
   const toggleReadyness = () => {
-    socket.emit("SetReady", true);
+    socket.emit("SetReady", true, (response) => {});
   };
 
   const sendMessage = (msg: string) => {
-    socket.emit("Message", msg);
+    socket.emit("Message", msg, (response) => {});
   };
 
   const updateCanvas = (canvas: Canvas) => {
-    socket.emit("UpdateCanvas", canvas);
+    socket.emit("UpdateCanvas", canvas, (response) => {});
     updateState({ canvas });
   };
 
