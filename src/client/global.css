@@ -32,3 +32,9 @@ button {
   font: inherit;
   cursor: pointer;
 }
+
+.Toastify__toast {
+  background: #000 !important;
+  border: 1px solid #fff !important;
+  border-radius: 0 !important;
+}

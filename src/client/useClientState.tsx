@@ -4,6 +4,7 @@ import { type Socket } from "socket.io-client";
 import { PlayerId } from "../shared/Data/PlayerId";
 import { type Canvas } from "../shared/Data/Canvas/Canvas";
 import { SharedRoom } from "../shared/Data/SharedRoom";
+import { toast } from "react-toastify";
 
 export interface ClientState {
   state: "main" | "lobby" | "game";
@@ -56,29 +57,47 @@ export function ClientStateProvider({
 
   const joinRoom = (name: string, roomId: string) => {
     socket.emit("JoinRoom", name, roomId, (response) => {
+      if (name.trim() == "") {
+        toast.error("Name cannot be empty");
+        return;
+      }
       if (response.success) {
         updateState({ state: "lobby", room: response.data });
+      } else {
+        toast.error(response.error);
       }
     });
   };
   const createRoom = (name: string) => {
+    if (name.trim() == "") {
+      toast.error("Name cannot be empty");
+      return;
+    }
     socket.emit("CreateRoom", name, (response) => {
       if (response.success) {
         updateState({ state: "lobby", room: response.data });
+      } else {
+        toast.error(response.error);
       }
     });
   };
 
   const toggleReadyness = () => {
-    socket.emit("SetReady", true, (response) => {});
+    socket.emit("SetReady", true, (response) => {
+      if (!response.success) toast.error(response.error);
+    });
   };
 
   const sendMessage = (msg: string) => {
-    socket.emit("Message", msg, (response) => {});
+    socket.emit("Message", msg, (response) => {
+      if (!response.success) toast.error(response.error);
+    });
   };
 
   const updateCanvas = (canvas: Canvas) => {
-    socket.emit("UpdateCanvas", canvas, (response) => {});
+    socket.emit("UpdateCanvas", canvas, (response) => {
+      if (!response.success) toast.error(response.error);
+    });
     updateState({ canvas });
   };
 
