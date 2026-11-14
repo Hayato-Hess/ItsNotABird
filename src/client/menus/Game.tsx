@@ -1,19 +1,13 @@
-import { useState } from "react";
-import { CanvasEmoji } from "../../shared/Data/Canvas/CanvasEmoji";
 import { Canvas } from "../components/Canvas";
 import { EmojiToolbar } from "../components/EmojiToolbar";
 import { useClientState } from "../useClientState";
 import { DragDropProvider } from "@dnd-kit/react";
-import { Droppable } from "@dnd-kit/dom";
 import { v4 as uuidv4 } from "uuid";
 
 export function Game() {
-  const { state, ownPlayerId } = useClientState();
+  const { state, gameFunctions, ownPlayerId } = useClientState();
 
-  const [test, setTest] = useState<CanvasEmoji[]>([
-    { id: "abc", emojieId: "1", PlacementX: 0, PlacementY: 0 },
-    { id: "def", emojieId: "2", PlacementX: 50, PlacementY: 50 },
-  ]);
+  const { updateCanvas, guess } = gameFunctions;
 
   return (
     <div>
@@ -24,7 +18,7 @@ export function Game() {
 
           const { target } = event.operation;
 
-          const all = [...test];
+          const all = [...state.canvas.Emojis];
           const emj = all.find(
             (e) => e.id === event.operation.source?.data?.id,
           );
@@ -35,7 +29,7 @@ export function Game() {
             const index = all.findIndex((e) => e.id === emj.id);
             if (index !== -1) {
               all.splice(index, 1);
-              setTest(all);
+              updateCanvas({ Emojis: all });
             }
           }
 
@@ -65,11 +59,11 @@ export function Game() {
               emj.PlacementY = positionY;
             }
 
-            setTest(all);
+            updateCanvas({ Emojis: all });
           }
         }}
       >
-        <Canvas id="canvas" data={test} />
+        <Canvas id="canvas" data={state.canvas.Emojis} />
         <EmojiToolbar />
       </DragDropProvider>
     </div>

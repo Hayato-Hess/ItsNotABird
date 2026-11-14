@@ -8,7 +8,8 @@ export function Lobby(props: LobbyProps) {
   const { state, ownPlayerId, toggleReadyness } = useClientState();
   return (
     <div>
-      {state.players.map((player) => (
+      <div>Room Code: {state.room?.id}</div>
+      {state.room?.players.map((player) => (
         <PlayerDisplay
           key={player.Id}
           player={player}

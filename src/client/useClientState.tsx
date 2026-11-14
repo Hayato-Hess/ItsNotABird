@@ -1,17 +1,20 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { ClientToServerEvents, ServerToClientEvents } from "../shared/message";
 import { type Socket } from "socket.io-client";
-import { Player } from "../shared/Data/Player";
 import { PlayerId } from "../shared/Data/PlayerId";
+import { type Canvas } from "../shared/Data/Canvas/Canvas";
+import { SharedRoom } from "../shared/Data/SharedRoom";
 
 export interface ClientState {
   state: "main" | "lobby" | "game";
-  players: Player[];
+  room?: SharedRoom;
+  canvas: Canvas;
 }
 
 export const INITIAL_GAME_STATE: ClientState = {
   state: "main",
-  players: [],
+  room: undefined,
+  canvas: { Emojis: [] },
 };
 
 const ClientStateContext = createContext<{
@@ -23,6 +26,10 @@ const ClientStateContext = createContext<{
   };
   lobbyFunctions: {
     toggleReadyness: () => void;
+  };
+  gameFunctions: {
+    guess: (string: string) => void;
+    updateCanvas: (canvas: Canvas) => void;
   };
   toggleReadyness: () => void;
 }>(null as never);
@@ -45,28 +52,49 @@ export function ClientStateProvider({
   };
 
   const joinRoom = (name: string, roomId: string) => {
-    socket.emit("JoinRoom", name, (roomId) => {});
-    updateState({ state: "lobby" });
+    socket.emit("JoinRoom", name, roomId, (room) => {
+      updateState({ state: "lobby", room });
+    });
   };
   const createRoom = (name: string) => {
+    console.log("Creating room with name:", name);
     socket.emit("CreateRoom", name, (room) => {
-      console.log("Created room with ID:", room);
-      updateState({ state: "lobby" });
+      updateState({ state: "lobby", room });
     });
   };
 
   const toggleReadyness = () => {
     socket.emit("SetReady", true);
-    //TODO websocket stuff
     updateState({ state: "game" });
   };
 
+  const guess = (string: string) => {
+    //TODO: Implement guess logic
+  };
+
+  const updateCanvas = (canvas: Canvas) => {
+    socket.emit("UpdateCanvas", canvas);
+    updateState({ canvas });
+  };
+
   useEffect(() => {
-    //socket.on("test", (message) => {
-    //  console.log(message);
-    //});
+    socket.on("RoomUpdate", (room) => {
+      updateState({ room });
+    });
+    socket.on("GameStart", () => {
+      updateState({ state: "game", canvas: { Emojis: [] } });
+    });
+    socket.on("UpdateCanvas", (canvas) => {
+      updateState({ canvas });
+    });
+    socket.on("GameEnd", () => {
+      updateState({ state: "lobby" });
+    });
     return () => {
-      //socket.off("test");
+      socket.off("RoomUpdate");
+      socket.off("GameStart");
+      socket.off("UpdateCanvas");
+      socket.off("GameEnd");
     };
   }, [socket]);
 
@@ -77,6 +105,7 @@ export function ClientStateProvider({
         ownPlayerId: socket.id as PlayerId,
         mainMenuFunctions: { joinRoom, createRoom },
         lobbyFunctions: { toggleReadyness },
+        gameFunctions: { guess, updateCanvas },
         toggleReadyness,
       }}
     >
