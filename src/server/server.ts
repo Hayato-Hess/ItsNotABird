@@ -31,26 +31,51 @@ io.on("connection", (socket) => {
   socket.on("CreateRoom", (playerName, callback) => {
     const roomId : RoomId = Math.random().toString(36).substring(2, 7).toUpperCase();
     const room = new Room(roomId);
+    const playerId : PlayerId = socket.id;
 
-    const newPlayer = new Player(socket.id, playerName);
+    const newPlayer = new Player(playerId, playerName);
     room.join(newPlayer);
+    socket.join(roomId);
+    roomMembership.set(playerId, roomId);
 
     roomMap.set(roomId, room);
 
     callback(room.toSharedRoom());
   });
 
-  socket.on("JoinRoom",  (playerName, roomId, callback) => {
+  socket.on("JoinRoom",  (playerName, roomId : RoomId, callback) => {
     const room = roomMap.get(roomId);
     if (!room) {
       throw new Error("Room not found");
     }
 
-    const newPlayer = new Player(socket.id, playerName);
+    const playerId : PlayerId = socket.id;
+    const newPlayer = new Player(playerId, playerName);
     room.join(newPlayer);
+    socket.join(roomId);
+    roomMembership.set(playerId, roomId);
 
     callback(room.toSharedRoom());
   });
+
+  socket.on("UpdateCanvas",  (canvas) => {
+    const playerId : PlayerId = socket.id;
+    const roomId: RoomId | undefined = roomMembership.get(playerId);
+    if(!roomId){
+      throw new Error("Room not found")
+    }
+
+    const room = roomMap.get(roomId);
+    if(room?.game.getGameState().currentActivePlayer != playerId){
+      console.log("a non active player is updating the canvas")
+      //throw new Error("Not the active player!") // todo
+    }
+
+    room?.game.updateCanvas(canvas);
+
+    io.to(roomId).emit("UpdateCanvas", canvas);
+  });
+
 });
 
 http.listen(PORT, "0.0.0.0", () => {
