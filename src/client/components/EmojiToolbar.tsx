@@ -5,23 +5,21 @@ import { Flex } from "./Flex";
 
 export function EmojiToolbar() {
   return (
-    <div style={{ width: "100%" }}>
-      <Flex
-        wrap
-        gap="10px"
-        justify="start"
-        align="start"
-        className={styles.toolbar}
-      >
-        {Emojis.map((emoji) => (
-          <DraggableEmojie
-            key={emoji}
-            id={"new_" + emoji}
-            emojieId={emoji}
-            ghost
-          />
-        ))}
-      </Flex>
-    </div>
+    <Flex
+      wrap
+      gap="10px"
+      justify="start"
+      align="start"
+      className={styles.toolbar}
+    >
+      {Emojis.map((emoji) => (
+        <DraggableEmojie
+          key={emoji}
+          id={"new_" + emoji}
+          emojieId={emoji}
+          ghost
+        />
+      ))}
+    </Flex>
   );
 }

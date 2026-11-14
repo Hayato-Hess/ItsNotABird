@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Button } from "../components/Button";
 import { Canvas } from "../components/Canvas";
 import { Chat } from "../components/Chat";
@@ -10,10 +11,14 @@ import { v4 as uuidv4 } from "uuid";
 export function Game() {
   const { state, gameFunctions, ownPlayerId } = useClientState();
 
+  const isActivePlayer = useMemo(() => {
+    return state.room?.gameState.currentActivePlayer === ownPlayerId;
+  }, [state, ownPlayerId]);
+
   const { updateCanvas, guess } = gameFunctions;
 
   return (
-    <div>
+    <div style={{ width: "100%", height: "100%" }}>
       <DragDropProvider
         onDragEnd={(event) => {
           if (event.canceled) return;
@@ -71,11 +76,15 @@ export function Game() {
       >
         <div className={styles.layout}>
           <div className={styles.board}>
-            <Canvas id="canvas" data={state.canvas.Emojis} />
-            <EmojiToolbar />
+            <Canvas
+              id="canvas"
+              data={state.canvas.Emojis}
+              disableInteraction={!isActivePlayer}
+            />
+            {isActivePlayer && <EmojiToolbar />}
           </div>
           <div className={styles.chat}>
-            <Chat />
+            <Chat hideSend={isActivePlayer} />
           </div>
         </div>
       </DragDropProvider>

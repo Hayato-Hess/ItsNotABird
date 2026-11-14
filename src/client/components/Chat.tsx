@@ -3,7 +3,11 @@ import { useClientState } from "../useClientState";
 import { Button } from "./Button";
 import { Flex } from "./Flex";
 
-export function Chat() {
+export type ChatProps = {
+  hideSend?: boolean;
+};
+
+export function Chat(props: ChatProps) {
   const { state, gameFunctions, lobbyFunctions } = useClientState();
   const [msg, setMsg] = useState("");
 
@@ -27,19 +31,23 @@ export function Chat() {
     >
       <div>TODO CHAT</div>
       <div style={{ flex: 1, overflowY: "auto" }}></div>
-      <input
-        type="text"
-        placeholder="Type a message..."
-        value={msg}
-        onChange={(e) => setMsg(e.target.value)}
-      />
-      <Button
-        onClick={() => {
-          sendMessage();
-        }}
-      >
-        Send
-      </Button>
+      {!props.hideSend && (
+        <>
+          <input
+            type="text"
+            placeholder="Type a message..."
+            value={msg}
+            onChange={(e) => setMsg(e.target.value)}
+          />
+          <Button
+            onClick={() => {
+              sendMessage();
+            }}
+          >
+            Send
+          </Button>
+        </>
+      )}
     </Flex>
   );
 }

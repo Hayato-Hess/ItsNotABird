@@ -1,21 +1,26 @@
 .layout {
   display: flex;
   gap: 10px;
+  height: 100%;
 }
 
 .board {
   display: flex;
   flex-direction: column;
-}
-
-.chat {
-  display: flex;
   flex: 1;
   min-width: 0;
 }
 
+
+.chat {
+  display: flex;
+  flex: 0 0 20rem;
+  width: 20rem;
+}
+
 .chat > * {
   flex: 1;
+  min-width: 0;
 }
 
 @media (max-width: 768px) {
@@ -23,12 +28,8 @@
     flex-direction: column;
   }
 
-  .board {
-    align-items: center;
-    width: 100%;
-  }
-
   .chat {
+    flex: none;
     width: 100%;
   }
 }
