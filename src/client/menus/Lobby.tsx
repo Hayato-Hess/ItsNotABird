@@ -7,7 +7,7 @@ export interface LobbyProps {}
 export function Lobby(props: LobbyProps) {
   const { state, ownPlayerId, toggleReadyness } = useClientState();
   return (
-    <div style={{ border: "1px solid #fff", padding: "2rem", height: "100%" }}>
+    <div className="box" style={{ padding: "2rem", height: "100%" }}>
       <div>Room Code:</div>
       <strong style={{ color: "var(--color-primary)", fontSize: 20 }}>
         {state.room?.id}

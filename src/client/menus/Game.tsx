@@ -82,7 +82,7 @@ export function Game() {
       >
         <div className={styles.layout}>
           <div className={styles.board}>
-            <div style={{ padding: "0.5rem", border: "1px solid #fff" }}>
+            <div className="box" style={{ padding: "0.5rem" }}>
               {isActivePlayer ? (
                 <div>
                   {state.wordToGuess?.category || "???"}:{" "}

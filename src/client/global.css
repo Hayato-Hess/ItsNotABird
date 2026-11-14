@@ -12,6 +12,7 @@
   --color-text: #f5f5f7;
   --font-pixel: "Press Start 2P", monospace;
   --padding-md: 2rem;
+  --border: 1px solid #fff;
 }
 
 *,
@@ -28,6 +29,10 @@ body {
   font-family: var(--font-pixel);
 }
 
+.box {
+  border: var(--border);
+}
+
 button {
   font: inherit;
   cursor: pointer;
@@ -35,7 +40,7 @@ button {
 
 .Toastify__toast {
   background: #000 !important;
-  border: 1px solid #fff !important;
+  border: var(--border) !important;
   border-radius: 0 !important;
 }
 
@@ -44,4 +49,8 @@ input {
   font-family: var(--font-pixel);
   font-size: 14px;
   padding: 4px;
+}
+
+a {
+  color: var(--color-primary);
 }

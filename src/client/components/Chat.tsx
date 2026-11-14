@@ -36,7 +36,8 @@ export function Chat(props: ChatProps) {
     <Flex
       direction="column"
       gap="10px"
-      style={{ border: "1px solid white", padding: "10px" }}
+      className="box"
+      style={{ padding: "10px" }}
     >
       <div style={{ flex: 1, overflowY: "auto" }}>
         {state.messages.map((msg, index) => (
