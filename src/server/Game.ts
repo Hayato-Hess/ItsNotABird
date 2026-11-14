@@ -25,7 +25,7 @@ export class Game {
     getGameData = (): GameData => this._gameData;
 
     start() {
-        this._gameData.currentActivePlayer = this._parent.players[Math.random() * this._parent.players.length].Id
+        this._gameData.currentActivePlayer = this._parent.players[Math.floor(Math.random() * this._parent.players.length)].Id
         this._gameData.gameState = GameState.Started;
     }
 }
