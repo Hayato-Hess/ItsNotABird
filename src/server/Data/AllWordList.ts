@@ -13,9 +13,19 @@ export const allWordList : WordToGuess[] = [
     {word : "Batman", category : "Character"},
     {word : "Dagobert Duck", category : "Character"},
     {word : "Mulan", category : "Character"},
+    {word : "Superman", category : "Character"},
+    {word : "Sailormoon", category : "Character"},
+    {word : "Mickey Mouse", category : "Character"},
+    {word : "Tick Trick and Track", category : "Character"},
+    {word : "Goofy", category : "Fairy Tale"},
+    {word : "Cinderella", category : "Fairy Tale"},
+    {word : "Little red riding hood", category : "Fairy Tale"},
+    {word : "Sleeping Beauty", category : "Fairy Tale"},
+
     {word : "Pizza", category : "Food"},
     {word : "Cake", category : "Food"},
     {word : "Sushi", category : "Food"},
     {word : "Pasta", category : "Food"},
     {word : "Pasta", category : "Food"},
+
 ]

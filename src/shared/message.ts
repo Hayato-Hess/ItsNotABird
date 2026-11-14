@@ -13,7 +13,7 @@ export interface ServerToClientEvents {
   WordToGuess: (wordToGuess: WordToGuess) => void;
 
   // state changes
-  GameStart: (newActivePlayer: PlayerId) => void;
+  GameStart: (newActivePlayer: PlayerId, category: string) => void;
   RoundEnd: () => void;
   GameEnd: () => void;
 }

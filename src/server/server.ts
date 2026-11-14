@@ -166,8 +166,9 @@ function startNewGame(room: Room) {
     source: MessageSource.Server,
   } satisfies MessagePayload);
 
-  io.to(room.id).emit("GameStart", newActivePlayer);
-  player?.Socket.emit("WordToGuess", <WordToGuess> room.game.getGameData().currentSearchedWord)
+  let searchedWord = <WordToGuess> room.game.getGameData().currentSearchedWord;
+  io.to(room.id).emit("GameStart", newActivePlayer, searchedWord.category);
+  player?.Socket.emit("WordToGuess", searchedWord)
 }
 
 function sendGameEnd(room: Room) {
