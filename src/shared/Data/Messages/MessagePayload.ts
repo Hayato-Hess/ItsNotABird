@@ -1,6 +1,7 @@
-import {MessageSource} from "./MessageSource.js";
+import { MessageSource } from "./MessageSource.js";
 
 export type MessagePayload = {
-    message : string;
-    source: MessageSource;
-}
+  message: string;
+  source: MessageSource;
+  sender?: string;
+};

@@ -6,12 +6,13 @@ import { type Canvas } from "../shared/Data/Canvas/Canvas";
 import { SharedRoom } from "../shared/Data/SharedRoom";
 import { toast } from "react-toastify";
 import { WordToGuess } from "../shared/Data/WordToGuess";
+import { MessagePayload } from "../shared/Data/Messages/MessagePayload";
 
 export interface ClientState {
   state: "main" | "lobby" | "game";
   room?: SharedRoom;
   canvas: Canvas;
-  messages: string[];
+  messages: MessagePayload[];
   wordToGuess?: WordToGuess;
 }
 
@@ -123,7 +124,7 @@ export function ClientStateProvider({
     socket.on("Message", (msg) => {
       setState((prev) => ({
         ...prev,
-        messages: [...prev.messages, msg.message],
+        messages: [...prev.messages, msg],
       }));
     });
     socket.on("WordToGuess", (word) => {
