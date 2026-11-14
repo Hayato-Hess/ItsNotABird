@@ -1,5 +1,8 @@
+import { Button } from "../components/Button";
 import { Canvas } from "../components/Canvas";
+import { Chat } from "../components/Chat";
 import { EmojiToolbar } from "../components/EmojiToolbar";
+import { Flex } from "../components/Flex";
 import { useClientState } from "../useClientState";
 import { DragDropProvider } from "@dnd-kit/react";
 import { v4 as uuidv4 } from "uuid";
@@ -67,8 +70,13 @@ export function Game() {
           }
         }}
       >
-        <Canvas id="canvas" data={state.canvas.Emojis} />
-        <EmojiToolbar />
+        <Flex gap="10px">
+          <div style={{ height: "100%" }}>
+            <Canvas id="canvas" data={state.canvas.Emojis} />
+            <EmojiToolbar />
+          </div>
+          <Chat />
+        </Flex>
       </DragDropProvider>
     </div>
   );

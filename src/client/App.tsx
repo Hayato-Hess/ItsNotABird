@@ -2,19 +2,13 @@ import { Lobby } from "./menus/Lobby";
 import { useClientState as useClientState } from "./useClientState";
 import { RoomSelection } from "./menus/RoomSelection";
 import { Game } from "./menus/Game";
+import { Flex } from "./components/Flex";
 
 export function App() {
   const { state } = useClientState();
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        height: "100%",
-      }}
-    >
+    <Flex direction="column" style={{ width: "100%", height: "100%" }}>
       <h1
         style={{
           textAlign: "center",
@@ -25,20 +19,13 @@ export function App() {
       >
         It's not a Bird?!
       </h1>
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          width: "100%",
-          justifyContent: "center",
-        }}
-      >
-        <div style={{ maxWidth: "40rem", height: "100%" }}>
+      <Flex flex={1} justify="center" style={{ width: "100%" }}>
+        <div style={{ maxWidth: "40rem", width: "100%", height: "100%" }}>
           {state.state === "main" && <RoomSelection />}
           {state.state === "lobby" && <Lobby />}
           {state.state === "game" && <Game />}
         </div>
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   );
 }
