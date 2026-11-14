@@ -11,6 +11,7 @@ export type CanvasProps = {
   selectedId?: string;
   onSelect?: (id: string | undefined) => void;
   onEmojyChange?: (id: string, newScale: number, newRotation: number) => void;
+  onDelete?: (id: string) => void;
 };
 
 export function Canvas(props: CanvasProps) {
@@ -23,7 +24,11 @@ export function Canvas(props: CanvasProps) {
   useEffect(() => {
     if (!selectedId) return;
     const onPointerDown = (e: PointerEvent) => {
-      if (!(e.target instanceof Element && e.target.closest("[data-canvas-emoji]"))) {
+      if (
+        !(
+          e.target instanceof Element && e.target.closest("[data-canvas-emoji]")
+        )
+      ) {
         onSelect?.(undefined);
       }
     };
@@ -59,6 +64,7 @@ export function Canvas(props: CanvasProps) {
             onRotate={(v) => {
               props.onEmojyChange?.(emoji.id, emoji.Scale, v);
             }}
+            onDelete={() => props.onDelete?.(emoji.id)}
           />
         </div>
       ))}

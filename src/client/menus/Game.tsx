@@ -35,6 +35,28 @@ export function Game() {
     setSelectedEmojiId(id);
   };
 
+  const updateEmoji = (id: string, newScale: number, newRotation: number) => {
+    const emojiIndex = state.canvas.Emojis.findIndex((e) => e.id === id);
+    if (emojiIndex !== -1) {
+      const updatedEmojis = [...state.canvas.Emojis];
+      updatedEmojis[emojiIndex] = {
+        ...updatedEmojis[emojiIndex],
+        Scale: newScale,
+        Rotation: newRotation,
+      };
+      updateCanvas({ Emojis: updatedEmojis });
+    }
+  };
+
+  const deleteEmoji = (id: string) => {
+    const emojiIndex = state.canvas.Emojis.findIndex((e) => e.id === id);
+    if (emojiIndex !== -1) {
+      const updatedEmojis = [...state.canvas.Emojis];
+      updatedEmojis.splice(emojiIndex, 1);
+      updateCanvas({ Emojis: updatedEmojis });
+    }
+  };
+
   useEffect(() => {
     setSelectedEmojiId(undefined);
   }, [isActivePlayer]);
@@ -138,20 +160,8 @@ export function Game() {
                   disableInteraction={!isActivePlayer}
                   selectedId={selectedEmojiId}
                   onSelect={setSelectedEmojiId}
-                  onEmojyChange={(id, newScale, newRotation) => {
-                    const emojiIndex = state.canvas.Emojis.findIndex(
-                      (e) => e.id === id,
-                    );
-                    if (emojiIndex !== -1) {
-                      const updatedEmojis = [...state.canvas.Emojis];
-                      updatedEmojis[emojiIndex] = {
-                        ...updatedEmojis[emojiIndex],
-                        Scale: newScale,
-                        Rotation: newRotation,
-                      };
-                      updateCanvas({ Emojis: updatedEmojis });
-                    }
-                  }}
+                  onEmojyChange={updateEmoji}
+                  onDelete={deleteEmoji}
                 />
               </div>
               {isActivePlayer && (

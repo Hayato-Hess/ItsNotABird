@@ -45,6 +45,7 @@ export type DraggableEmojieProps = {
   onSelect?: () => void;
   onResize?: (newScale: number) => void;
   onRotate?: (newRotatin: number) => void;
+  onDelete?: () => void;
 };
 export const DraggableEmojie = (props: DraggableEmojieProps) => {
   const { ref, isDragging } = useDraggable({
@@ -104,16 +105,21 @@ export const DraggableEmojie = (props: DraggableEmojieProps) => {
       const dx = e.clientX - s.cx;
       const dy = e.clientY - s.cy;
       if (s.mode === "scale") {
-        setLiveScale(Math.min(4, Math.max(0.3, (s.scale * Math.hypot(dx, dy)) / s.dist)));
+        setLiveScale(
+          Math.min(4, Math.max(0.3, (s.scale * Math.hypot(dx, dy)) / s.dist)),
+        );
       } else {
-        setLiveRotation(s.rotation + ((Math.atan2(dy, dx) - s.angle) * 180) / Math.PI);
+        setLiveRotation(
+          s.rotation + ((Math.atan2(dy, dx) - s.angle) * 180) / Math.PI,
+        );
       }
     },
     onPointerUp: () => {
       const mode = start.current?.mode;
       start.current = null;
       if (mode === "scale" && liveScale !== null) props.onResize?.(liveScale);
-      if (mode === "rotate" && liveRotation !== null) props.onRotate?.(liveRotation);
+      if (mode === "rotate" && liveRotation !== null)
+        props.onRotate?.(liveRotation);
     },
   });
 
@@ -143,8 +149,19 @@ export const DraggableEmojie = (props: DraggableEmojieProps) => {
             transform: `rotate(${rotation}deg)`,
           }}
         >
-          <div className={`${styles.handle} ${styles.scaleHandle}`} {...handleProps("scale")} />
-          <div className={`${styles.handle} ${styles.rotateHandle}`} {...handleProps("rotate")} />
+          <div
+            className={`${styles.handle} ${styles.scaleHandle}`}
+            {...handleProps("scale")}
+          />
+          <div
+            className={`${styles.handle} ${styles.rotateHandle}`}
+            {...handleProps("rotate")}
+          />
+
+          <div
+            className={`${styles.handle} ${styles.deleteHandle}`}
+            onClick={props.onDelete}
+          />
         </div>
       )}
     </div>

@@ -56,3 +56,15 @@
   transform: translate(-50%, -50%);
   cursor: grab;
 }
+
+.deleteHandle {
+  right: 0;
+  top: 0;
+  transform: translate(50%, -50%);
+  background: #f00;
+  color:#fff;  
+  width: 13px;
+  height: 13px;
+  cursor: grab;
+  cursor: pointer;
+}
