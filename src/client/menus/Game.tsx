@@ -6,6 +6,7 @@ import { EmojiToolbar } from "../components/EmojiToolbar";
 import { useClientState } from "../useClientState";
 import styles from "./Game.module.css";
 import { DragDropProvider } from "@dnd-kit/react";
+import { AutoScroller } from "@dnd-kit/dom";
 import { v4 as uuidv4 } from "uuid";
 
 export function Game() {
@@ -20,6 +21,7 @@ export function Game() {
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <DragDropProvider
+        plugins={(defaults) => defaults.filter((p) => p !== AutoScroller)}
         onDragEnd={(event) => {
           if (event.canceled) return;
 
