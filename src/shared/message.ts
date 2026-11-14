@@ -31,8 +31,7 @@ export interface ClientToServerEvents {
     callback: (room: ServerResponse<SharedRoom>) => void,
   ) => void;
 
-  SetReady: (
-    newState: boolean,
+  ToggleReady: (
     callback: (error: ServerResponse<void>) => void,
   ) => void;
   Message: (

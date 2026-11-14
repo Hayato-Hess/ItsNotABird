@@ -52,6 +52,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("JoinRoom", (playerName, roomId: RoomId, callback) => {
+    roomId = roomId.toUpperCase().trim();
+
     const room = roomMap.get(roomId);
     if (!room) {
       callback({
@@ -74,7 +76,7 @@ io.on("connection", (socket) => {
     sendRoomUpdate(room);
   });
 
-  socket.on("SetReady", (newState, callback) => {
+  socket.on("ToggleReady", (callback) => {
     const playerId: PlayerId = socket.id;
     const room = findRoom(playerId);
     if (!room) {
@@ -93,7 +95,7 @@ io.on("connection", (socket) => {
       });
       return;
     }
-    player.IsReady = newState;
+    player.IsReady = !player.IsReady;
 
     let game = room.game;
     if (room.allPlayersReady()) {
@@ -102,7 +104,7 @@ io.on("connection", (socket) => {
 
     io.to(room.id).emit("RoomUpdate", room.toSharedRoom());
     if (game.getGameData().gameState == GameState.Started) {
-      startNewGame(room);
+      sendGameStartEvents(room);
     }
   });
 
@@ -173,7 +175,7 @@ http.listen(PORT, "0.0.0.0", () => {
   }
 });
 
-function startNewGame(room: Room) {
+function sendGameStartEvents(room: Room) {
   let newActivePlayer = <PlayerId>room.game.getGameData().currentActivePlayer;
   let player = findPlayer(newActivePlayer);
 
@@ -210,7 +212,7 @@ function handleCorrectMessageReceived(room: Room, sender: Player) {
   if (room.game.getGameData().gameState == GameState.GameEnd) {
     sendGameEnd(room);
   } else {
-    startNewGame(room);
+    sendGameStartEvents(room);
   }
 }
 

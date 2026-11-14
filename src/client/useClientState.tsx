@@ -86,7 +86,7 @@ export function ClientStateProvider({
   };
 
   const toggleReadyness = () => {
-    socket.emit("SetReady", true, (response) => {
+    socket.emit("ToggleReady", (response) => {
       if (!response.success) toast.error(response.error);
     });
   };

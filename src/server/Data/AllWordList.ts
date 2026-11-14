@@ -7,11 +7,10 @@ export const allWordList : WordToGuess[] = [
     {word : "Shark", category : "Animal"},
     {word : "Unicorn", category : "Animal"},
 
-    {word : "Racecar", category : "Vehicle"},
     {word : "Rocket", category : "Vehicle"},
     {word : "Train", category : "Vehicle"},
     {word : "Spaceship", category : "Vehicle"},
-    {word : "Hot Air Balloon", category : "Vehicle"},
+    {word : "Car", category : "Vehicle"},
 
     {word : "Donald Trump", category : "Person"},
     {word : "Einstein", category : "Person"},
@@ -24,7 +23,6 @@ export const allWordList : WordToGuess[] = [
 
     {word : "Goofy", category : "Comic Character"},
     {word : "Cinderella", category : "Fairy Tale"},
-    {word : "Little red riding hood", category : "Fairy Tale"},
     {word : "Sleeping Beauty", category : "Fairy Tale"},
     {word : "Rapunzel", category : "Fairy Tale"},
     {word : "Aladdin", category : "Fairy Tale"},
@@ -32,22 +30,18 @@ export const allWordList : WordToGuess[] = [
     {word : "Pizza", category : "Food"},
     {word : "Cake", category : "Food"},
     {word : "Sushi", category : "Food"},
-    {word : "Pasta", category : "Food"},
-    {word : "Hamburger", category : "Food"},
+    {word : "Hotdog", category : "Food"},
 
     {word : "Legend of Zelda", category : "Games"},
-    {word : "Super Mario", category : "Games"},
     {word : "Portal", category : "Games"},
     {word : "Mario Kart", category : "Games"},
     {word : "Sims", category : "Games"},
-    {word : "Fortnite", category : "Games"},
     {word : "Minecraft", category : "Games"},
     {word : "Tetris", category : "Games"},
     {word : "Pacman", category : "Games"},
 
     {word : "Dragonball", category : "Anime"},
     {word : "Naruto", category : "Anime"},
-    {word : "Kikis Deliery Service", category : "Anime"},
     {word : "Deathnote", category : "Anime"},
     {word : "Sailormoon", category : "Anime"},
     {word : "One Piece", category : "Anime"},
@@ -60,6 +54,8 @@ export const allWordList : WordToGuess[] = [
     {word : "Table", category : "Objects"},
     {word : "Door", category : "Objects"},
     {word : "Umbrella", category : "Objects"},
+
+    {word : "Time", category : "Concept"},
 
 
 ]
