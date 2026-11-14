@@ -7,6 +7,11 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from "../shared/message.js";
+import {RoomId} from "../shared/Data/RoomId.js";
+import {SharedPlayer} from "../shared/Data/SharedPlayer.js";
+import {Room} from "./Data/Room.js";
+import {Player} from "./Data/Player.js";
+import {PlayerId} from "../shared/Data/PlayerId.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
 
@@ -16,10 +21,38 @@ app.use(express.static(fileURLToPath(new URL("../client", import.meta.url))));
 const http = createServer(app);
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(http);
 
+const roomMap =  new Map<RoomId, Room>();
+const roomMembership =  new Map<PlayerId, RoomId>();
+
+
 io.on("connection", (socket) => {
   console.log("connected", socket.id);
   socket.on("test", (msg) => {
     console.log(msg);
+  });
+
+  socket.on("CreateRoom", (playerName, callback) => {
+    const roomId : RoomId = Math.random().toString(36).substring(2, 7).toUpperCase();
+    const room = new Room(roomId);
+
+    const newPlayer = new Player(socket.id, playerName);
+    room.join(newPlayer);
+
+    roomMap.set(roomId, room);
+
+    callback(room.toSharedRoom());
+  });
+
+  socket.on("JoinRoom",  (playerName, roomId, callback) => {
+    const room = roomMap.get(roomId);
+    if (!room) {
+      throw new Error("Room not found");
+    }
+
+    const newPlayer = new Player(socket.id, playerName);
+    room.join(newPlayer);
+
+    callback(room.toSharedRoom());
   });
 });
 

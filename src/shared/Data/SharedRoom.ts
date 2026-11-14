@@ -1,9 +1,9 @@
-import {Player} from "./Player.js";
+import {SharedPlayer} from "./SharedPlayer.js";
 import {RoomId} from "./RoomId.js";
 import {SharedGameState} from "./SharedGameState.js";
 
-export type Room = {
+export type SharedRoom = {
     id: RoomId;
-    players: Player[];
+    players: SharedPlayer[];
     gameState: SharedGameState;
 };
