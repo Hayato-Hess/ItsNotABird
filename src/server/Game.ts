@@ -41,7 +41,14 @@ export class Game {
     }
 
     isCorrectMessage(message:string) : boolean {
-        return this._gameData.currentSearchedWord?.word === message;
+        message = message.toLowerCase();
+        message = message.trim();
+
+        let word = this._gameData.currentSearchedWord?.word;
+        word = word?.toLocaleLowerCase();
+        word = word?.trim();
+
+        return word === message;
     }
 
     correctMessageSent(sender: PlayerId) : number {
