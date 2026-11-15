@@ -1,10 +1,16 @@
+.frame {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  background: #484646;
+  padding: 14px;
+}
+
 .toolbar {
   flex: 1;
   min-width: 0;
   min-height: 0;
   overflow-y: auto;
   align-content: flex-start;
-  background: #484646;
-  border: var(--border);
-  padding: 10px;
 }

@@ -37,13 +37,16 @@ export const Emojis = [
   "turtle",
   "snake",
 
-  // Obst
+  // Obst & Gemüse
   "fruitApple",
   "fruitBanana",
   "fruitCherry",
   "fruitLemon",
   "fruitMelon",
   "fruitOrange",
+  "ananas",
+  "tomato",
+  "carot",
 
   // Natur & Wetter
   "sun",

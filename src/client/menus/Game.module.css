@@ -29,7 +29,7 @@
 .header {
   flex: none;
   height: var(--header-h);
-  padding: 0 0.5rem;
+  padding: 0 1rem;
   display: flex;
   align-items: center;
   overflow: hidden;

@@ -1,13 +1,24 @@
 import { useClientState } from "../useClientState";
 import { Button } from "../components/Button";
 import { PlayerDisplay } from "../components/PlayerDisplay";
+import { Flex } from "../components/Flex";
 
 export interface LobbyProps {}
 
 export function Lobby(props: LobbyProps) {
-  const { state, ownPlayerId, toggleReadyness } = useClientState();
+  const {
+    state,
+    ownPlayerId,
+    toggleReadyness,
+    lobbyFunctions: { leaveRoom },
+  } = useClientState();
   return (
-    <div className="box" style={{ padding: "2rem", height: "100%" }}>
+    <Flex
+      className="box"
+      direction="column"
+      gap="1rem"
+      style={{ padding: "2rem", height: "100%" }}
+    >
       <div>Room Code:</div>
       <strong style={{ color: "var(--color-primary)", fontSize: 20 }}>
         {state.room?.id}
@@ -22,7 +33,23 @@ export function Lobby(props: LobbyProps) {
           isSelf={player.Id === ownPlayerId}
         />
       ))}
-      <Button onClick={toggleReadyness}>Ready</Button>
-    </div>
+      <div style={{ flex: 1 }} />
+      <Flex justify="center" style={{ gap: "1rem", width: "100%" }}>
+        {" "}
+        <Button
+          negative
+          onClick={leaveRoom}
+          style={{ height: "5rem", width: "15rem" }}
+        >
+          Leave
+        </Button>
+        <Button
+          onClick={toggleReadyness}
+          style={{ height: "5rem", width: "15rem" }}
+        >
+          Ready
+        </Button>
+      </Flex>
+    </Flex>
   );
 }

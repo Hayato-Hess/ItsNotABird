@@ -22,10 +22,7 @@ export function Rules() {
             others have to guess that word.
           </p>
         </div>
-        <div
-          className="box"
-          style={{ marginTop: "1rem", padding: "1rem", flex: "1" }}
-        >
+        <div className="box" style={{ marginTop: "1rem", flex: "1" }}>
           <div style={{ color: "var(--color-primary)" }}>Credits:</div>
           <br />
           <p>
@@ -46,10 +43,7 @@ export function Rules() {
           </p>
         </div>
       </Flex>
-      <div
-        className="box"
-        style={{ marginTop: "1rem", padding: "1rem", flex: "1" }}
-      >
+      <div className="box" style={{ marginTop: "1rem", flex: "1" }}>
         <p>
           <div style={{ color: "var(--color-primary)" }}>AI Usage:</div>
           <br />

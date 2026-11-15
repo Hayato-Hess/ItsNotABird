@@ -46,7 +46,7 @@ export function Chat(props: ChatProps) {
       direction="column"
       gap="10px"
       className="box"
-      style={{ padding: "10px" }}
+      style={{ padding: "20px" }}
     >
       <div
         ref={messagesRef}
