@@ -26,6 +26,12 @@ export const allWordList : WordToGuess[] = [
     {word : "Sleeping Beauty", category : "Fairy Tale"},
     {word : "Rapunzel", category : "Fairy Tale"},
     {word : "Aladdin", category : "Fairy Tale"},
+    {word : "Snow white", category : "Fairy Tale"},
+    {word : "Little mermaid", category : "Fairy Tale"},
+    {word : "Princes and the pea", category : "Fairy Tale"},
+    {word : "The emperors new clothes", category : "Fairy Tale"},
+    {word : "Hansel and Gretel", category : "Fairy Tale"},
+
 
     {word : "Pizza", category : "Food"},
     {word : "Cake", category : "Food"},
@@ -40,9 +46,9 @@ export const allWordList : WordToGuess[] = [
     {word : "Tetris", category : "Games"},
     {word : "Pacman", category : "Games"},
 
-    {word : "Dragonball", category : "Anime"},
+    {word : "Dragon ball", category : "Anime"},
     {word : "Naruto", category : "Anime"},
-    {word : "Deathnote", category : "Anime"},
+    {word : "Death note", category : "Anime"},
     {word : "Sailormoon", category : "Anime"},
     {word : "One Piece", category : "Anime"},
 
