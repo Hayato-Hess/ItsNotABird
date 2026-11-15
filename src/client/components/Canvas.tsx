@@ -37,7 +37,7 @@ export function Canvas(props: CanvasProps) {
   }, [selectedId, onSelect]);
 
   return (
-    <div className={`${styles.canvas} box`} ref={ref}>
+    <div className={`${styles.canvas} box`} ref={ref} data-canvas-id={props.id}>
       {props.data.map((emoji) => (
         <div
           key={emoji.id}

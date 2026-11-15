@@ -37,6 +37,14 @@ body {
   background: #000;
 }
 
+.titlebar {
+  --titlebar-bg-scale: 2;
+  border-style: solid;
+  border-width: 0 calc(13px * var(--titlebar-bg-scale)) calc(6px * var(--titlebar-bg-scale));
+  border-image: url("/top-bg.png") 0 13 6 fill stretch;
+  image-rendering: pixelated;
+}
+
 button {
   font: inherit;
   cursor: pointer;
