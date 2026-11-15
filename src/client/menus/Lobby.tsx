@@ -35,7 +35,6 @@ export function Lobby(props: LobbyProps) {
       ))}
       <div style={{ flex: 1 }} />
       <Flex justify="center" style={{ gap: "1rem", width: "100%" }}>
-        {" "}
         <Button
           negative
           onClick={leaveRoom}
