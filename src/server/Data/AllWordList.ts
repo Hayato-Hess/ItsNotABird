@@ -79,7 +79,10 @@ export const allWordList : WordToGuess[] = [
     {word : "The emperors new clothes", category : "Fairy Tale"},
     {word : "Hansel and Gretel", category : "Fairy Tale"},
 
-
+    {word : "icecream", category : "Food"},
+    {word : "pancake", category : "Food"},
+    {word : "cheese", category : "Food"},
+    {word : "donut", category : "Food"},
     {word : "Pizza", category : "Food"},
     {word : "Cake", category : "Food"},
     {word : "Sushi", category : "Food"},
@@ -103,11 +106,38 @@ export const allWordList : WordToGuess[] = [
     {word : "Mickey Mouse", category : "Cartoon"},
     {word : "Dagobert Duck", category : "Cartoon"},
     {word : "Simpsons", category : "Cartoon"},
+    {word : "Bugs Bunny", category : "Cartoon"},
+    {word : "Minnie Mouse", category : "Cartoon"},
+    {word : "Popeye", category : "Cartoon"},
+    {word : "Tom and Jerry", category : "Cartoon"},
+    {word : "Garfield", category : "Cartoon"},
+    {word : "Spongebob", category : "Cartoon"},
+    {word : "Phineas and Ferb", category : "Cartoon"},
+    {word : "Bluey", category : "Cartoon"},
+    {word : "Peppa Pig", category : "Cartoon"},
+    {word : "Marge Simpson", category : "Cartoon"},
+    {word : "Road Runner", category : "Cartoon"},
+    {word : "Family Guy", category : "Cartoon"},
+    {word : "Sonic", category : "Game"},
+    {word : "Rick and Morty", category : "Cartoon"},
 
     {word : "Chair", category : "Objects"},
     {word : "Table", category : "Objects"},
     {word : "Door", category : "Objects"},
     {word : "Umbrella", category : "Objects"},
+    {word : "Fork", category : "Objects"},
+    {word : "Knife", category : "Objects"},
+    {word : "Spoon", category : "Objects"},
+    {word : "Cup", category : "Objects"},
+    {word : "Soap", category : "Objects"},
+    {word : "Telephone", category : "Objects"},
+    {word : "Shoe", category : "Objects"},
+    {word : "Pen", category : "Objects"},
+    {word : "Computer", category : "Objects"},
+    {word : "Window", category : "Objects"},
+    {word : "Key", category : "Objects"},
+    {word : "Clock", category : "Objects"},
+    {word : "Bell", category : "Objects"},
 
     {word : "Time", category : "Concept"},
 
@@ -118,6 +148,5 @@ export const allWordList : WordToGuess[] = [
     {word : "Soccer", category : "Sport"},
     {word : "Baseball", category : "Sport"},
     {word : "Bowling", category : "Sport"},
-
 
 ]
