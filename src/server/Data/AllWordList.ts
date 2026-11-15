@@ -111,5 +111,13 @@ export const allWordList : WordToGuess[] = [
 
     {word : "Time", category : "Concept"},
 
+    {word : "Volleyball", category : "Sport"},
+    {word : "Badminton", category : "Sport"},
+    {word : "Table Tennis", category : "Sport"},
+    {word : "Squash", category : "Sport"},
+    {word : "Soccer", category : "Sport"},
+    {word : "Baseball", category : "Sport"},
+    {word : "Bowling", category : "Sport"},
+
 
 ]
