@@ -35,10 +35,8 @@
 
 .handle {
   position: absolute;
-  width: 12px;
-  height: 12px;
-  background: #fff;
-  border-radius: 50%;
+  width: 20px;
+  height: 20px;
   pointer-events: auto;
   touch-action: none;
 }
@@ -48,23 +46,26 @@
   bottom: 0;
   transform: translate(50%, 50%);
   cursor: nwse-resize;
+  background: url('/scale.png');
+  background-size: cover;
 }
 
 .rotateHandle {
   left: 50%;
   top: -18px;
   transform: translate(-50%, -50%);
-  cursor: grab;
+  cursor: grab;  
+  background: url('/rotate.png');
+  background-size: cover;
 }
 
 .deleteHandle {
   right: 0;
   top: 0;
   transform: translate(50%, -50%);
-  background: #f00;
-  color:#fff;  
-  width: 13px;
-  height: 13px;
+
   cursor: grab;
-  cursor: pointer;
+  cursor: pointer;  
+  background: url('/delete.png');
+  background-size: cover;
 }
