@@ -77,7 +77,7 @@ export function ClientStateProvider({
       toast.error("Name cannot be empty");
       return;
     }
-    socket.emit("CreateRoom", name, (response) => {
+    socket.emit("CreateRoom", name, 1, (response) => {
       if (response.success) {
         updateState({ state: "lobby", room: response.data });
       } else {

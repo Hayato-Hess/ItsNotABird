@@ -54,7 +54,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("CreateRoom", (playerName, callback) => {
+  socket.on("CreateRoom", (playerName, roundNumber, callback) => {
     let roomId: RoomId;
     do{
       roomId = Math.random()

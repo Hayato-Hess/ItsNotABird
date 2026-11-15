@@ -23,6 +23,7 @@ export interface ClientToServerEvents {
 
   CreateRoom: (
     playerName: string,
+    roundNumber: number,
     callback: (room: ServerResponse<SharedRoom>) => void,
   ) => void;
   JoinRoom: (
