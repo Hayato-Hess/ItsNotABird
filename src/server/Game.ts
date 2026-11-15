@@ -70,15 +70,18 @@ export class Game {
     }
 
     correctMessageSent(sender: PlayerId) : number {
+        let currentActivePlayer = this._room.players.find(player => player.Id === this._gameData.currentActivePlayer);
+        if(currentActivePlayer){
+            currentActivePlayer.Score += 50;
+        }
+
         this.nextTurn();
 
         let senderPlayer = this._room.players.find(player => player.Id == sender);
         if (!senderPlayer) {
             return 0;
         }
-
         senderPlayer.Score += 100;
-
         return senderPlayer.Score;
     }
 
