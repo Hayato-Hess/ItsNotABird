@@ -47,7 +47,6 @@ io.on("connection", (socket) => {
     console.log("Client disconnected:", socket.id);
     console.log("Reason:", reason);
 
-
     const playerId: PlayerId = socket.id;
     let room = findRoom(playerId);
     if(room){
@@ -105,6 +104,7 @@ io.on("connection", (socket) => {
     sendRoomUpdate(room);
     if(room.game.getGameData().gameState == GameState.Started){
       io.to(room.id).emit("UpdateCanvas", room.game.getGameData().canvas);
+      sendServerMessage(room, "Player " + playerName + " joined.")
     }
   });
 
@@ -146,6 +146,20 @@ io.on("connection", (socket) => {
       return;
     }
     player.IsReady = !player.IsReady;
+
+    if(room.game.getGameData().gameState == GameState.Started){
+      // late join logic
+
+      let currentSearchedWord = room.game.getGameData().currentSearchedWord;
+      if(room.game.getGameData().currentActivePlayer != null && currentSearchedWord != null){
+        let currentActivePlayer : PlayerId = <PlayerId>room.game.getGameData().currentActivePlayer;
+        socket.emit("GameStart", currentActivePlayer, currentSearchedWord.category);
+      }
+      socket.emit("RoomUpdate", room.toSharedRoom());
+      socket.emit("UpdateCanvas", room.game.getGameData().canvas)
+
+      return;
+    }
 
     let game = room.game;
     if (room.allPlayersReady()) {
@@ -349,6 +363,11 @@ function sendRoomUpdate(room: Room) {
 }
 
 function leaveRoom(room: Room, playerId: string) {
+  let player = findPlayer(playerId);
+  if(player){
+     sendServerMessage(room, "Player " +player.Name + " left.")
+  }
+
   room.leave(playerId);
   roomMembership.delete(playerId);
 
