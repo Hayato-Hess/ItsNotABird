@@ -5,18 +5,22 @@ export function Button({
   children,
   width,
   keepFocus,
+  negative,
+  style,
 }: {
   onClick: () => void;
   children: React.ReactNode;
   width?: string;
+  style?: React.CSSProperties;
   keepFocus?: boolean;
+  negative?: boolean;
 }) {
   return (
     <button
-      className={styles.gameButton}
+      className={`${styles.gameButton} ${negative ? styles.negative : ""}`}
       onClick={onClick}
       onMouseDown={keepFocus ? (e) => e.preventDefault() : undefined}
-      style={{ width }}
+      style={{ width, ...style }}
     >
       {children}
     </button>

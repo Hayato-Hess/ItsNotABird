@@ -33,6 +33,7 @@ const ClientStateContext = createContext<{
   lobbyFunctions: {
     toggleReadyness: () => void;
     sendMessage: (string: string) => void;
+    leaveRoom: () => void;
   };
   gameFunctions: {
     guess: (string: string) => void;
@@ -82,6 +83,22 @@ export function ClientStateProvider({
       } else {
         toast.error(response.error);
       }
+    });
+  };
+
+  const leaveRoom = () => {
+    socket.emit("LeaveRoom", (response) => {
+      if (!response.success) {
+        toast.error(response.error);
+        return;
+      }
+      updateState({
+        state: "main",
+        room: undefined,
+        canvas: { Emojis: [] },
+        messages: [],
+        wordToGuess: undefined,
+      });
     });
   };
 

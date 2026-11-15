@@ -11,3 +11,10 @@
   border-image-source: url("/button-pressed.png");
   padding: 3px 8px 0;
 }
+
+.gameButton.negative {
+  border-image-source: url("/button-negative.png");
+}
+.gameButton.negative:active {
+  border-image-source: url("/button-negative-pressed.png");
+}
