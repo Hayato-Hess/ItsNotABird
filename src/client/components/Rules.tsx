@@ -2,11 +2,16 @@ import { Flex } from "./Flex";
 
 export function Rules() {
   return (
-    <div style={{ fontSize: "12px" }}>
-      <Flex gap="20px">
+    <div style={{ fontSize: "12px", lineHeight: "1.5" }}>
+      <Flex gap="20px" wrap>
         <div
           className="box"
-          style={{ marginTop: "1rem", padding: "1rem", flex: "1" }}
+          style={{
+            marginTop: "1rem",
+            padding: "1rem",
+            flex: "1",
+            minWidth: "20rem",
+          }}
         >
           <div style={{ color: "var(--color-primary)" }}>Rules:</div>
           <br />
@@ -41,6 +46,26 @@ export function Rules() {
           </p>
         </div>
       </Flex>
+      <div
+        className="box"
+        style={{ marginTop: "1rem", padding: "1rem", flex: "1" }}
+      >
+        <p>
+          <div style={{ color: "var(--color-primary)" }}>AI Usage:</div>
+          <br />
+          <div>
+            We tried to use as litle AI assistance as possible in this project.
+            We only used it for followig topics:
+          </div>
+          <div>
+            - Making our slightly responsive layout fully responsive to
+            different screen sizes{" "}
+          </div>
+          <div>
+            - Assiting in the scale and rotation logic of emoji placement
+          </div>
+        </p>
+      </div>
     </div>
   );
 }
