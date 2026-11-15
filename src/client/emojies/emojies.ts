@@ -18,6 +18,7 @@ export const Emojis = [
   "mood3",
   "mood4",
   "mood5",
+  "think",
   "heart",
   "skull",
 
@@ -33,6 +34,7 @@ export const Emojis = [
   "mouse",
   "chonkyPidgeon",
   "goose",
+  "birdplane",
   "fish",
   "turtle",
   "snake",

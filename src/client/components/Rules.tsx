@@ -8,7 +8,6 @@ export function Rules() {
           className="box"
           style={{
             marginTop: "1rem",
-            padding: "1rem",
             flex: "1",
             minWidth: "20rem",
           }}

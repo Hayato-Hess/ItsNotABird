@@ -55,6 +55,7 @@ export function Canvas(props: CanvasProps) {
             rotation={emoji.Rotation}
             disableDrag={props.disableInteraction}
             onSelect={() => {
+              if (props.disableInteraction) return;
               props.onSelect?.(emoji.id);
             }}
             selected={props.selectedId === emoji.id}
