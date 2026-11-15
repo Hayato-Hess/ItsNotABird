@@ -36,26 +36,35 @@ export class Game {
     }
 
     isCorrectMessage(message:string) : boolean {
-        message = message.toLowerCase();
-        message = message.trim();
+        message = this.stripUnnecessaryCharacters(message);
 
         let word = this._gameData.currentSearchedWord?.word;
-        word = word?.toLocaleLowerCase();
-        word = word?.trim();
+        if(!word){
+            return false;
+        }
+        word = this.stripUnnecessaryCharacters(word);
 
         return word === message;
     }
 
+    private stripUnnecessaryCharacters(word:string) : string{
+        word = word.toLowerCase();
+        word = word.replaceAll("_", "");
+        word = word.replaceAll(" ", "");
+        word = word.replaceAll("-", "");
+        word = word.trim();
+
+        return word;
+    }
+
     getLevenshteinDistanceToSearchedWord(message:string) : number | undefined {
-        message = message.toLowerCase();
-        message = message.trim();
+        message = this.stripUnnecessaryCharacters(message);
 
         let word = this._gameData.currentSearchedWord?.word;
-        word = word?.toLocaleLowerCase();
-        word = word?.trim();
         if(!word){
             return -1;
         }
+        word = this.stripUnnecessaryCharacters(word);
 
         return distance(message, word);
     }
