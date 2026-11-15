@@ -3,29 +3,75 @@ import { useClientState as useClientState } from "./useClientState";
 import { RoomSelection } from "./menus/RoomSelection";
 import { Game } from "./menus/Game";
 import { Flex } from "./components/Flex";
+import { useEffect, useState } from "react";
+
+/**
+ * Height of the actually visible area. Shrinks when the on-screen keyboard
+ * opens (also on iOS, where dvh does not react to the keyboard).
+ */
+function useVisibleHeight() {
+  const [height, setHeight] = useState<number | undefined>(
+    () => window.visualViewport?.height,
+  );
+
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const update = () => {
+      // * scale so pinch-zooming doesn't shrink the layout, only the keyboard does
+      setHeight(vv.height * vv.scale);
+      // iOS pans the page to the focused input, undo that – our layout already fits
+      if (vv.scale === 1 && window.scrollY !== 0) window.scrollTo(0, 0);
+    };
+    vv.addEventListener("resize", update);
+    vv.addEventListener("scroll", update);
+    return () => {
+      vv.removeEventListener("resize", update);
+      vv.removeEventListener("scroll", update);
+    };
+  }, []);
+
+  return height;
+}
 
 export function App() {
   const { state } = useClientState();
+  const visibleHeight = useVisibleHeight();
+  const hideTitle =
+    state.state === "game" &&
+    visibleHeight !== undefined &&
+    visibleHeight < 600;
 
   return (
-    <Flex direction="column" style={{ width: "100%", height: "100%" }}>
+    <Flex
+      direction="column"
+      style={{
+        width: "100%",
+        height: visibleHeight ? `${visibleHeight}px` : "100dvh",
+        overflow: "hidden",
+      }}
+    >
       <h1
         style={{
           textAlign: "center",
           background: "#ad4545",
-          padding: "1rem",
-          margin: "0 0 1rem 0",
+          flex: "none",
+          fontSize: "clamp(1rem, 4dvh, 2rem)",
+          padding: "clamp(0.25rem, 2dvh, 1rem)",
+          margin: "0 0 clamp(0.25rem, 2dvh, 1rem) 0",
+          display: hideTitle ? "none" : undefined,
         }}
       >
         It's not a Bird?!
       </h1>
-      <Flex flex={1} justify="center" style={{ width: "100%" }}>
+      <Flex flex={1} justify="center" style={{ width: "100%", minHeight: 0 }}>
         <div
           style={{
             maxWidth: "60rem",
             width: "100%",
-            height: "100%",
-            padding: "1rem",
+            minHeight: 0,
+            overflowY: "auto",
+            padding: "clamp(0.5rem, 2dvh, 1rem)",
           }}
         >
           {state.state === "main" && <RoomSelection />}

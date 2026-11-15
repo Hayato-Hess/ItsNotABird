@@ -3,6 +3,9 @@ export const Emojis = [
   "1",
   "2",
   "3",
+  "plus",
+  "minus",
+  "equal",
   "checkYes",
   "checkNo",
   "thumbs_up",
@@ -16,6 +19,12 @@ export const Emojis = [
   "mood4",
   "mood5",
   "heart",
+  "skull",
+
+  // Menschen
+  "male",
+  "female",
+  "malefemale",
 
   // Tiere
   "bunny",
@@ -45,8 +54,10 @@ export const Emojis = [
   "rain",
   "storm",
   "snow",
+  "snowflake",
   "rainbow",
   "waves",
+  "flame",
   "clover",
 
   // Orte & Gebäude
@@ -60,6 +71,9 @@ export const Emojis = [
   "chesterhat",
   "shild",
   "gear",
+  "lamp",
+  "coin",
+  "feather",
   "cigarette",
 
   // Farben

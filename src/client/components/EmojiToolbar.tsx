@@ -3,7 +3,11 @@ import { Emojis } from "../emojies/emojies";
 import { DraggableEmojie } from "./DraggableEmojie";
 import { Flex } from "./Flex";
 
-export function EmojiToolbar() {
+export type EmojieToolbarProps = {
+  onClick: (emoji: string) => void;
+};
+
+export function EmojiToolbar(props: EmojieToolbarProps) {
   return (
     <Flex
       wrap
@@ -13,13 +17,15 @@ export function EmojiToolbar() {
       className={styles.toolbar}
     >
       {Emojis.map((emoji) => (
-        <DraggableEmojie
-          key={emoji}
-          id={"new_" + emoji}
-          emojieId={emoji}
-          ghost
-          small
-        />
+        <div key={emoji} onClick={() => props.onClick(emoji)}>
+          <DraggableEmojie
+            id={"new_" + emoji}
+            emojieId={emoji}
+            ghost
+            mouseDragOnly
+            small
+          />
+        </div>
       ))}
     </Flex>
   );

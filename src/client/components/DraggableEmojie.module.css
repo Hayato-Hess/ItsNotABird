@@ -1,7 +1,7 @@
 .emojie {
   position: relative;
   aspect-ratio: 1;
-  height: 7vh;
+  height: var(--emoji-size);
   image-rendering: pixelated;
   touch-action: none;
   user-select: none;
@@ -11,13 +11,17 @@
   cursor: pointer;
 }
 
+.mouseDragOnly {
+  touch-action: manipulation;
+}
+
 .small {
   height: 4vh;
 }
 
 .emojie[data-dnd-dragging] {
-  height: 7vh !important;
-  width: 7vh !important;
+  height: var(--emoji-size) !important;
+  width: var(--emoji-size) !important;
   max-height: none !important;
   max-width: none !important;
 }
@@ -51,4 +55,16 @@
   top: -18px;
   transform: translate(-50%, -50%);
   cursor: grab;
+}
+
+.deleteHandle {
+  right: 0;
+  top: 0;
+  transform: translate(50%, -50%);
+  background: #f00;
+  color:#fff;  
+  width: 13px;
+  height: 13px;
+  cursor: grab;
+  cursor: pointer;
 }

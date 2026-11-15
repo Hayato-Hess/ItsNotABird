@@ -2,26 +2,120 @@
   display: flex;
   gap: 10px;
   height: 100%;
-  max-height: 85vh
+  min-height: 0;
 }
 
 .board {
-  display: flex;
-  flex-direction: column;
+  --ratio: 4 / 3;
+  --gap: 0.5rem;
+  --header-h: 2.5rem;
+  --toolbar-min-h: 6rem;
+  --toolbar-min-w: 9rem;
+
+  container: board / size;
   flex: 1;
   min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
 }
 
+.noToolbar {
+  --toolbar-min-h: 0px;
+  --toolbar-min-w: 0px;
+}
+
+.header {
+  flex: none;
+  height: var(--header-h);
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: clamp(0.6rem, 2.5cqw, 1rem);
+}
+
+.header > div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*
+ * Emoji size relative to the canvas width. Registered as <length> so it is
+ * computed to px here on .stage and inherited as a fixed value (otherwise the
+ * cqw/cqh inside --canvas-w would be resolved again at each emoji).
+ */
+@property --emoji-size {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 48px;
+}
+
+/* Toolbar below the canvas */
+.stage {
+  --canvas-w: min(
+    100cqw,
+    (100cqh - var(--header-h) - var(--toolbar-min-h) - 2 * var(--gap)) *
+      var(--ratio)
+  );
+  --emoji-size: calc(var(--canvas-w) * 0.1);
+
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.canvasSlot {
+  flex: none;
+  width: var(--canvas-w);
+}
+
+.toolbarSlot {
+  flex: 1;
+  min-height: 0;
+  width: var(--canvas-w);
+  display: flex;
+}
+
+@container board (min-aspect-ratio: 3 / 2) {
+  .stage {
+    --canvas-w: min(
+      100cqw - var(--toolbar-min-w) - var(--gap),
+      (100cqh - var(--header-h) - var(--gap)) * var(--ratio)
+    );
+
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+  }
+
+  .canvasSlot {
+    align-self: flex-start;
+  }
+
+  .toolbarSlot {
+    width: auto;
+    min-width: var(--toolbar-min-w);
+    max-width: 20rem;
+  }
+}
 
 .chat {
   display: flex;
   flex: 0 0 20rem;
   width: 20rem;
+  min-height: 0;
 }
 
 .chat > * {
   flex: 1;
   min-width: 0;
+  min-height: 0;
 }
 
 @media (max-width: 768px) {
@@ -30,7 +124,41 @@
   }
 
   .chat {
-    flex: none;
+    flex: 0 0 clamp(8rem, 25dvh, 14rem);
     width: 100%;
+  }
+
+  /*
+   * Guessing on mobile: the canvas gets as much space as possible, the chat
+   * takes the rest but never less than input + a few lines of messages.
+   * Sizing is done against the whole layout, so it also works when the
+   * keyboard is open and the visible height shrinks.
+   */
+  .guessing {
+    --chat-min-h: 7.5rem;
+
+    container-type: size;
+  }
+
+  .guessing .board {
+    --header-h: 2rem;
+
+    container-type: normal;
+    flex: none;
+  }
+
+  .guessing .stage {
+    --canvas-w: min(
+      100cqw,
+      (100cqh - var(--header-h) - var(--chat-min-h) - var(--gap) - 10px) *
+        var(--ratio)
+    );
+
+    flex: none;
+  }
+
+  .guessing .chat {
+    flex: 1 1 0;
+    min-height: var(--chat-min-h);
   }
 }
