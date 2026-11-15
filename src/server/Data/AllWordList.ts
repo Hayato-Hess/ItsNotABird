@@ -45,12 +45,28 @@ export const allWordList : WordToGuess[] = [
 
     {word : "Donald Trump", category : "Person"},
     {word : "Einstein", category : "Person"},
+    {word : "Nicola Tessla", category : "Person"},
+    {word : "Isaac Newton", category : "Person"},
+    {word : "Julius Caesar", category : "Person"},
+    {word : "Goethe", category : "Person"},
+    {word : "Cleopatra", category : "Person"},
+    {word : "Princess Diana", category : "Person"},
+    {word : "Frida Kahlo", category : "Person"},
+    {word : "Marie Curie", category : "Person"},
 
     {word : "Lucky Luke", category : "Comic Hero"},
     {word : "Batman", category : "Comic Hero"},
     {word : "Superman", category : "Comic Hero"},
     {word : "Asterix", category : "Comic Hero"},
     {word : "Spiderman", category : "Comic Hero"},
+    {word : "Hulk", category : "Comic Hero"},
+    {word : "Deadpool", category : "Comic Hero"},
+    {word : "Supergirl", category : "Comic Hero"},
+    {word : "Batgirl", category : "Comic Hero"},
+    {word : "Catwoman", category : "Comic Hero"},
+    {word : "Wonderwoman", category : "Comic Hero"},
+    {word : "PowerPuff Girls", category : "Comic Hero"},
+    {word : "Obelix", category : "Comic Hero"},
 
     {word : "Goofy", category : "Comic Character"},
     {word : "Cinderella", category : "Fairy Tale"},
@@ -85,7 +101,8 @@ export const allWordList : WordToGuess[] = [
 
     {word : "Ninja Turtles", category : "Cartoon"},
     {word : "Mickey Mouse", category : "Cartoon"},
-    {word : "Dagobert Duck", category : "Character"},
+    {word : "Dagobert Duck", category : "Cartoon"},
+    {word : "Simpsons", category : "Cartoon"},
 
     {word : "Chair", category : "Objects"},
     {word : "Table", category : "Objects"},
