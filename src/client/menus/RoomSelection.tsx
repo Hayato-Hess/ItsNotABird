@@ -55,12 +55,12 @@ export function RoomSelection() {
                 Create Room
               </Button>
               <div style={{ background: "#fff", width: "1px" }} />
-              <Flex direction="column">
+              <Flex direction="column" gap="10px">
                 <InputField
                   label="Room Code"
                   value={roomCode}
                   onChange={setRoomCode}
-                  width="200px"
+                  width="250px"
                 />
                 <Button
                   onClick={() => mainMenuFunctions.joinRoom(name, roomCode)}

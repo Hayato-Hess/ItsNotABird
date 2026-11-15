@@ -9,24 +9,26 @@ export type EmojieToolbarProps = {
 
 export function EmojiToolbar(props: EmojieToolbarProps) {
   return (
-    <Flex
-      wrap
-      gap="10px"
-      justify="start"
-      align="start"
-      className={styles.toolbar}
-    >
-      {Emojis.map((emoji) => (
-        <div key={emoji} onClick={() => props.onClick(emoji)}>
-          <DraggableEmojie
-            id={"new_" + emoji}
-            emojieId={emoji}
-            ghost
-            mouseDragOnly
-            small
-          />
-        </div>
-      ))}
-    </Flex>
+    <div className={`box ${styles.frame}`}>
+      <Flex
+        wrap
+        gap="10px"
+        justify="start"
+        align="start"
+        className={styles.toolbar}
+      >
+        {Emojis.map((emoji) => (
+          <div key={emoji} onClick={() => props.onClick(emoji)}>
+            <DraggableEmojie
+              id={"new_" + emoji}
+              emojieId={emoji}
+              ghost
+              mouseDragOnly
+              small
+            />
+          </div>
+        ))}
+      </Flex>
+    </div>
   );
 }

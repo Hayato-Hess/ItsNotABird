@@ -1,5 +1,4 @@
 .canvas {
-  border: var(--border);
   background: #484646;
   aspect-ratio: 4 / 3;
   width: 100%;
