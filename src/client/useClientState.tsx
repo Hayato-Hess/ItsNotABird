@@ -163,7 +163,7 @@ export function ClientStateProvider({
         state,
         ownPlayerId: socket.id as PlayerId,
         mainMenuFunctions: { joinRoom, createRoom },
-        lobbyFunctions: { toggleReadyness, sendMessage },
+        lobbyFunctions: { toggleReadyness, sendMessage, leaveRoom },
         gameFunctions: { guess: sendMessage, updateCanvas },
         toggleReadyness,
       }}
