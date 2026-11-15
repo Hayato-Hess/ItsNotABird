@@ -6,6 +6,8 @@ export type InputFieldProps = {
   type?: "text" | "number";
   min?: number;
   max?: number;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  autoFocus?: boolean;
 };
 
 export function InputField(props: InputFieldProps) {
@@ -20,6 +22,8 @@ export function InputField(props: InputFieldProps) {
         style={{ width: props.width }}
         min={props.min}
         max={props.max}
+        onKeyDown={props.onKeyDown}
+        autoFocus={props.autoFocus}
       />
     </div>
   );

@@ -37,6 +37,13 @@ export function RoomSelection() {
               value={name}
               onChange={setName}
               width="200px"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  onPlay();
+                }
+              }}
+              autoFocus={true}
             />
             <Button onClick={onPlay} width="250px" keepFocus>
               Play
@@ -73,6 +80,12 @@ export function RoomSelection() {
                   value={roomCode}
                   onChange={setRoomCode}
                   width="250px"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      mainMenuFunctions.joinRoom(name, roomCode);
+                    }
+                  }}
                 />
                 <Button
                   onClick={() => mainMenuFunctions.joinRoom(name, roomCode)}
