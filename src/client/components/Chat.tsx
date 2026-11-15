@@ -6,6 +6,8 @@ import { MessageSource } from "../../shared/Data/Messages/MessageSource";
 
 export type ChatProps = {
   hideSend?: boolean;
+  showGiveUp?: boolean;
+  onGiveUp?: () => void;
 };
 
 export function Chat(props: ChatProps) {
@@ -101,6 +103,16 @@ export function Chat(props: ChatProps) {
           </div>
         ))}
       </div>
+      {props.showGiveUp && (
+        <Button
+          negative
+          onClick={() => {
+            props.onGiveUp?.();
+          }}
+        >
+          Give Up
+        </Button>
+      )}
       {!props.hideSend && (
         <Flex gap="10px" align="center">
           <input

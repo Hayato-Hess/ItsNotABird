@@ -117,6 +117,10 @@ export function Game() {
     }
   };
 
+  const giveUp = () => {
+    gameFunctions.giveUp();
+  };
+
   useEffect(() => {
     setSelectedEmojiId(undefined);
   }, [isActivePlayer]);
@@ -232,7 +236,11 @@ export function Game() {
             </div>
           </div>
           <div className={styles.chat}>
-            <Chat hideSend={isActivePlayer} />
+            <Chat
+              hideSend={isActivePlayer}
+              showGiveUp={isActivePlayer}
+              onGiveUp={giveUp}
+            />
           </div>
         </div>
       </DragDropProvider>
