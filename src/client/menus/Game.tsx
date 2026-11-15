@@ -20,9 +20,69 @@ export function Game() {
     undefined,
   );
 
+  const overlap = (
+    a: { pX: number; pY: number; scale: number; rotaion: number },
+    b: { pX: number; pY: number; scale: number; rotaion: number },
+  ): boolean => {
+    const DEFAULT_SIZE = 10;
+
+    const scaledPaddingA = (DEFAULT_SIZE * a.scale) / 2;
+    const scaledPaddingB = (DEFAULT_SIZE * b.scale) / 2;
+
+    const aLeft = a.pX - scaledPaddingA;
+    const aRight = a.pX + scaledPaddingA;
+    const aTop = a.pY - scaledPaddingA;
+    const aBottom = a.pY + scaledPaddingA;
+
+    const bLeft = b.pX - scaledPaddingB;
+    const bRight = b.pX + scaledPaddingB;
+    const bTop = b.pY - scaledPaddingB;
+    const bBottom = b.pY + scaledPaddingB;
+
+    if (aRight < bLeft || aLeft > bRight || aBottom < bTop || aTop > bBottom) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const isFreePositoin = (pos: {
+    pX: number;
+    pY: number;
+    scale: number;
+    rotaion: number;
+  }): boolean => {
+    return !state.canvas.Emojis.some((v) =>
+      overlap(pos, {
+        pX: v.PlacementX,
+        pY: v.PlacementY,
+        rotaion: v.Rotation,
+        scale: v.Scale,
+      }),
+    );
+  };
+
   const spawnEmoji = (emoji: string) => {
     const id = uuidv4();
     const all = [...state.canvas.Emojis];
+    for (let y = 0; y < 90; y++) {
+      for (let x = 0; x < 90; x++) {
+        if (isFreePositoin({ pX: x, pY: y, scale: 1, rotaion: 0 })) {
+          all.push({
+            id,
+            emojieId: emoji,
+            PlacementX: x,
+            PlacementY: y,
+            Scale: 1,
+            Rotation: 0,
+          });
+          updateCanvas({ Emojis: all });
+          setSelectedEmojiId(id);
+          return;
+        }
+      }
+    }
+    //fallback to center
     all.push({
       id,
       emojieId: emoji,
