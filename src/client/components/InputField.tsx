@@ -3,6 +3,11 @@ export type InputFieldProps = {
   label?: string;
   width?: string;
   onChange: (newValue: string) => void;
+  type?: "text" | "number";
+  min?: number;
+  max?: number;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  autoFocus?: boolean;
 };
 
 export function InputField(props: InputFieldProps) {
@@ -11,10 +16,14 @@ export function InputField(props: InputFieldProps) {
       {props.label && <label>{props.label}</label>}
       <br />
       <input
-        type="text"
+        type={props.type ?? "text"}
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
         style={{ width: props.width }}
+        min={props.min}
+        max={props.max}
+        onKeyDown={props.onKeyDown}
+        autoFocus={props.autoFocus}
       />
     </div>
   );
