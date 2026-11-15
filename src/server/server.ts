@@ -256,9 +256,9 @@ function sendGameEnd(room: Room) {
 
 function sendStatsUpdate(room: Room){
   if(room.game.getGameData().gameState == GameState.GameEnd){
-    sendServerMessage(room, "--- Final Scores ---");
+    sendServerMessage(room, "----- Final Scores -----");
   }else{
-    sendServerMessage(room, "--- Round " + (room.game.getGameData().currentRoundNumber) + " Scores ---");
+    sendServerMessage(room, "---- Round " + (room.game.getGameData().currentRoundNumber) + " Scores ----");
   }
   let players = room.players.slice().sort((a, b) => a.Score - b.Score);
   for (let player of players) {
@@ -275,13 +275,13 @@ function handleCorrectMessageReceived(room: Room, sender: Player, message: strin
 
   sendServerMessage(room, "correct guess '"+message+"' received from: " + sender?.Name);
 
-  if(room.game.getGameData().currentTurnNumber == 0){
-    sendStatsUpdate(room);
-  }
-
   if (room.game.getGameData().gameState == GameState.GameEnd) {
     sendGameEnd(room);
   } else {
+    if(room.game.getGameData().currentTurnNumber == 0){
+      sendStatsUpdate(room);
+    }
+
     sendGameStartEvents(room);
   }
 }

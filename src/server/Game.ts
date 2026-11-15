@@ -71,13 +71,13 @@ export class Game {
         this.selectRandomWord();
 
         this._gameData.currentTurnNumber++;
-        if(currentPlayerIndex == this._room.players.length-1){
+        if(this._gameData.currentTurnNumber >= this._room.players.length){
+            this._gameData.currentTurnNumber = 0;
             this._gameData.currentRoundNumber++;
         }
         if(this._gameData.currentRoundNumber >= this._gameData.totalRoundNumber){
             this._gameData.gameState = GameState.GameEnd;
             this._gameData.currentActivePlayer = null;
-            this._gameData.currentTurnNumber = 0;
         }
 
         let senderPlayer = this._room.players.find(player => player.Id == sender);
