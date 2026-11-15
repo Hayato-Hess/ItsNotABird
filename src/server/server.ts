@@ -189,6 +189,36 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("GiveUp", (callback) => {
+    const playerId: PlayerId = socket.id;
+    let player = findPlayer(playerId);
+    const room = findRoom(playerId);
+    if (!room || !player) {
+      callback({
+        success: false,
+        error: "Room or player not found",
+      });
+      return;
+    }
+
+    if (room.game.getGameData().currentActivePlayer != playerId) {
+      callback({
+        success: false,
+        error: "a non active player can not give up",
+      });
+      return;
+    }
+
+    sendServerMessage(room, player.Name + "gave up word was: '" + room.game.getGameData().currentSearchedWord);
+    room.game.nextTurn();
+    handleRoundUpdate(room);
+
+    callback({
+      success : true,
+      data: void 0
+    });
+  });
+
   socket.on("Message", (message, callback) => {
     const playerId: PlayerId = socket.id;
     let player = findPlayer(playerId);
@@ -267,23 +297,26 @@ function sendStatsUpdate(room: Room){
   sendServerMessage(room, "----------------------------");
 }
 
-function handleCorrectMessageReceived(room: Room, sender: Player, message: string) {
-  room.game.correctMessageSent(sender.Id);
+function handleRoundUpdate(room: Room) {
   sendRoomUpdate(room);
 
   io.to(room.id).emit("RoundEnd");
 
-  sendServerMessage(room, "correct guess '"+message+"' received from: " + sender?.Name);
-
   if (room.game.getGameData().gameState == GameState.GameEnd) {
     sendGameEnd(room);
   } else {
-    if(room.game.getGameData().currentTurnNumber == 0){
+    if (room.game.getGameData().currentTurnNumber == 0) {
       sendStatsUpdate(room);
     }
 
     sendGameStartEvents(room);
   }
+}
+
+function handleCorrectMessageReceived(room: Room, sender: Player, message: string) {
+  room.game.correctMessageSent(sender.Id);
+  sendServerMessage(room, "correct guess '" + message + "' received from: " + sender?.Name);
+  handleRoundUpdate(room);
 }
 
 function sendServerMessage(room: Room, message: string) {

@@ -70,24 +70,7 @@ export class Game {
     }
 
     correctMessageSent(sender: PlayerId) : number {
-        let currentPlayerIndex = this._room.players.findIndex(player => player.Id === this._gameData.currentActivePlayer);
-
-        if(currentPlayerIndex == -1){
-            this.setActivePlayerToRandom();
-        }else{
-            this._gameData.currentActivePlayer = this._room.players[(currentPlayerIndex+1)%this._room.players.length].Id;
-        }
-        this.selectRandomWord();
-
-        this._gameData.currentTurnNumber++;
-        if(this._gameData.currentTurnNumber >= this._room.players.length){
-            this._gameData.currentTurnNumber = 0;
-            this._gameData.currentRoundNumber++;
-        }
-        if(this._gameData.currentRoundNumber >= this._gameData.totalRoundNumber){
-            this._gameData.gameState = GameState.GameEnd;
-            this._gameData.currentActivePlayer = null;
-        }
+        this.nextTurn();
 
         let senderPlayer = this._room.players.find(player => player.Id == sender);
         if (!senderPlayer) {
@@ -97,5 +80,26 @@ export class Game {
         senderPlayer.Score += 100;
 
         return senderPlayer.Score;
+    }
+
+    public nextTurn() {
+        let currentPlayerIndex = this._room.players.findIndex(player => player.Id === this._gameData.currentActivePlayer);
+
+        if (currentPlayerIndex == -1) {
+            this.setActivePlayerToRandom();
+        } else {
+            this._gameData.currentActivePlayer = this._room.players[(currentPlayerIndex + 1) % this._room.players.length].Id;
+        }
+        this.selectRandomWord();
+
+        this._gameData.currentTurnNumber++;
+        if (this._gameData.currentTurnNumber >= this._room.players.length) {
+            this._gameData.currentTurnNumber = 0;
+            this._gameData.currentRoundNumber++;
+        }
+        if (this._gameData.currentRoundNumber >= this._gameData.totalRoundNumber) {
+            this._gameData.gameState = GameState.GameEnd;
+            this._gameData.currentActivePlayer = null;
+        }
     }
 }

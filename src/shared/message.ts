@@ -42,6 +42,9 @@ export interface ClientToServerEvents {
     message: string,
     callback: (error: ServerResponse<void>) => void,
   ) => void;
+  GiveUp: (
+      callback: (error: ServerResponse<void>) => void,
+  ) => void;
   UpdateCanvas: (
     newCanvas: Canvas,
     callback: (room: ServerResponse<void>) => void,
