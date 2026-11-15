@@ -28,7 +28,7 @@ const ClientStateContext = createContext<{
   ownPlayerId: PlayerId;
   mainMenuFunctions: {
     joinRoom: (name: string, roomId: string) => void;
-    createRoom: (name: string) => void;
+    createRoom: (name: string, rounds: number) => void;
   };
   lobbyFunctions: {
     toggleReadyness: () => void;
@@ -72,18 +72,23 @@ export function ClientStateProvider({
       }
     });
   };
-  const createRoom = (name: string) => {
+  const createRoom = (name: string, rounds: number) => {
     if (name.trim() == "") {
       toast.error("Name cannot be empty");
       return;
     }
-    socket.emit("CreateRoom", name, 1, (response) => {
-      if (response.success) {
-        updateState({ state: "lobby", room: response.data });
-      } else {
-        toast.error(response.error);
-      }
-    });
+    socket.emit(
+      "CreateRoom",
+      name,
+      Math.min(Math.max(rounds, 1), 9),
+      (response) => {
+        if (response.success) {
+          updateState({ state: "lobby", room: response.data });
+        } else {
+          toast.error(response.error);
+        }
+      },
+    );
   };
 
   const leaveRoom = () => {
@@ -138,7 +143,10 @@ export function ClientStateProvider({
       updateState({ canvas });
     });
     socket.on("GameEnd", () => {
-      updateState({ state: "lobby" });
+      updateState({
+        canvas: { Emojis: [] },
+        wordToGuess: { category: "Game Finished!", word: "???" },
+      });
     });
     socket.on("Message", (msg) => {
       setState((prev) => ({
