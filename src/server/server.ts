@@ -42,11 +42,27 @@ const roomMembership = new Map<PlayerId, RoomId>();
 io.on("connection", (socket) => {
   console.log("connected", socket.id);
 
+  socket.on("disconnect", (reason) => {
+    console.log("Client disconnected:", socket.id);
+    console.log("Reason:", reason);
+
+
+    const playerId: PlayerId = socket.id;
+    let room = findRoom(playerId);
+    if(room){
+      leaveRoom(room, playerId);
+    }
+  });
+
   socket.on("CreateRoom", (playerName, callback) => {
-    const roomId: RoomId = Math.random()
-      .toString(36)
-      .substring(2, 7)
-      .toUpperCase();
+    let roomId: RoomId;
+    do{
+      roomId = Math.random()
+          .toString(36)
+          .substring(2, 7)
+          .toUpperCase();
+    }while (roomMap.has(roomId) || roomId.includes('O') || roomId.includes('0'));
+
     const room = new Room(roomId);
     const playerId: PlayerId = socket.id;
 
@@ -89,6 +105,20 @@ io.on("connection", (socket) => {
     if(room.game.getGameData().gameState == GameState.Started){
       io.to(room.id).emit("UpdateCanvas", room.game.getGameData().canvas);
     }
+  });
+
+  socket.on("LeaveRoom", (callback) => {
+    const playerId: PlayerId = socket.id;
+    const room = findRoom(playerId);
+    if (!room) {
+      callback({
+        success: false,
+        error: "Room not found",
+      });
+      return;
+    }
+
+    leaveRoom(room, playerId);
   });
 
   socket.on("ToggleReady", (callback) => {
@@ -248,4 +278,13 @@ function findPlayer(playerId: PlayerId): Player | undefined {
 
 function sendRoomUpdate(room: Room) {
   io.to(room.id).emit("RoomUpdate", room.toSharedRoom());
+}
+
+function leaveRoom(room: Room, playerId: string) {
+  room.leave(playerId);
+  roomMembership.delete(playerId);
+
+  if (room.isEmpty()) {
+    roomMap.delete(room.id);
+  }
 }

@@ -2,6 +2,7 @@ import {RoomId} from "../../shared/Data/RoomId.js";
 import {Game} from "../Game.js";
 import {SharedRoom} from "../../shared/Data/SharedRoom.js";
 import {Player} from "./Player.js";
+import {PlayerId} from "../../shared/Data/PlayerId.js";
 
 export class Room {
     id: RoomId;
@@ -16,6 +17,14 @@ export class Room {
 
     public join(newPlayer: Player) {
         this.players.push(newPlayer);
+    }
+
+    public leave(playerId: PlayerId) {
+        this.players = this.players.filter(p => p.Id != playerId);
+    }
+
+    public isEmpty() : boolean {
+        return this.players.length == 0;
     }
 
     public allPlayersReady() : boolean {
