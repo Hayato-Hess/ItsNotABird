@@ -19,6 +19,10 @@ export class Room {
     }
 
     public allPlayersReady() : boolean {
+        if(this.players.length <= 1){
+            return false;
+        }
+
         for (const player of this.players) {
             if(!player.IsReady) {
                 return false;
