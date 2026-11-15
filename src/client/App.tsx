@@ -65,14 +65,11 @@ export function App() {
       <h1
         style={{
           textAlign: "center",
-          // top-bg.png: 16x16, rows 0-9 solid, rows 10-15 decorative edge.
-          // Bottom 6px are kept as fixed edge, rest is stretched vertically;
-          // everything repeats horizontally.
           borderStyle: "solid",
-          borderWidth: `0 0 ${6 * TOP_BG_SCALE}px 0`,
+          borderWidth: `0 ${13 * TOP_BG_SCALE}px ${6 * TOP_BG_SCALE}px`,
           borderImageSource: "url(/top-bg.png)",
-          borderImageSlice: "0 0 6 0 fill",
-          borderImageRepeat: "repeat stretch",
+          borderImageSlice: "0 13 6 fill",
+          borderImageRepeat: "stretch",
           imageRendering: "pixelated",
           flex: "none",
           fontSize: "clamp(1rem, 4dvh, 2rem)",
