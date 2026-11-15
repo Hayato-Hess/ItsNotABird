@@ -2,13 +2,23 @@ import { useState } from "react";
 import { InputField } from "../components/InputField";
 import { useClientState } from "../useClientState";
 import { Button } from "../components/Button";
-import { Flex } from "../components/Flex";
 import { Rules } from "../components/Rules";
+import { toast } from "react-toastify";
+import { Flex } from "../components/Flex";
 
 export function RoomSelection() {
+  const [mode, setMode] = useState<"name" | "room">("name");
   const { mainMenuFunctions } = useClientState();
   const [name, setName] = useState("");
   const [roomCode, setRoomCode] = useState("");
+
+  const onPlay = () => {
+    if (name.trim() === "") {
+      toast.error("Name cannot be empty");
+      return;
+    }
+    setMode("room");
+  };
 
   return (
     <>
@@ -19,44 +29,49 @@ export function RoomSelection() {
           padding: "var(--padding-md)",
         }}
       >
-        <Flex
-          direction="row"
-          gap="20px"
-          justify="center"
-          style={{ width: "100%", marginBottom: "20px" }}
-        >
-          <InputField
-            label="Name"
-            value={name}
-            onChange={setName}
-            width="200px"
-          />
-          <Button
-            onClick={() => mainMenuFunctions.createRoom(name)}
-            width="250px"
-          >
-            Create Room
-          </Button>
-        </Flex>
-        <Flex
-          direction="row"
-          gap="20px"
-          justify="center"
-          style={{ width: "100%" }}
-        >
-          <InputField
-            label="Room Code"
-            value={roomCode}
-            onChange={setRoomCode}
-            width="200px"
-          />
-          <Button
-            onClick={() => mainMenuFunctions.joinRoom(name, roomCode)}
-            width="250px"
-          >
-            Join Room
-          </Button>
-        </Flex>
+        {mode === "name" ? (
+          <Flex gap={"20px"} wrap justify="center">
+            <InputField
+              label="Name"
+              value={name}
+              onChange={setName}
+              width="200px"
+            />
+            <Button onClick={onPlay} width="250px">
+              Play
+            </Button>
+          </Flex>
+        ) : (
+          <div>
+            <p style={{ textAlign: "center" }}>
+              Welcome{" "}
+              <span style={{ color: "var(--color-primary)" }}>{name}</span>
+            </p>
+            <Flex gap="20px" wrap justify="center">
+              <Button
+                onClick={() => mainMenuFunctions.createRoom(name)}
+                width="250px"
+              >
+                Create Room
+              </Button>
+              <div style={{ background: "#fff", width: "1px" }} />
+              <Flex direction="column">
+                <InputField
+                  label="Room Code"
+                  value={roomCode}
+                  onChange={setRoomCode}
+                  width="200px"
+                />
+                <Button
+                  onClick={() => mainMenuFunctions.joinRoom(name, roomCode)}
+                  width="250px"
+                >
+                  Join Room
+                </Button>
+              </Flex>
+            </Flex>
+          </div>
+        )}
       </div>
       <Rules />
     </>
