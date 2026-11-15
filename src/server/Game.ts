@@ -3,14 +3,15 @@ import {Canvas} from "../shared/Data/Canvas/Canvas.js";
 import {Room} from "./Data/Room.js";
 import {GameState} from "../shared/Data/GameState.js";
 import {PlayerId} from "../shared/Data/PlayerId.js";
-import { distance, closest } from 'fastest-levenshtein';
+import {distance} from 'fastest-levenshtein';
 
 export class Game {
     private _gameData: GameData;
     private _room : Room;
 
-    constructor(room : Room) {
+    constructor(room: Room, totalRoundNumber: number) {
         this._gameData = new GameData();
+        this._gameData.totalRoundNumber = totalRoundNumber;
         this._room = room;
     }
 
@@ -60,13 +61,24 @@ export class Game {
     }
 
     correctMessageSent(sender: PlayerId) : number {
-        let index = this._room.players.findIndex(player => player.Id === this._gameData.currentActivePlayer);
-        if(index == -1){
+        let currentPlayerIndex = this._room.players.findIndex(player => player.Id === this._gameData.currentActivePlayer);
+
+        if(currentPlayerIndex == -1){
             this.setActivePlayerToRandom();
         }else{
-            this._gameData.currentActivePlayer = this._room.players[(index+1)%this._room.players.length].Id;
+            this._gameData.currentActivePlayer = this._room.players[(currentPlayerIndex+1)%this._room.players.length].Id;
         }
         this.selectRandomWord();
+
+        this._gameData.currentTurnNumber++;
+        if(currentPlayerIndex == this._room.players.length-1){
+            this._gameData.currentRoundNumber++;
+        }
+        if(this._gameData.currentRoundNumber >= this._gameData.totalRoundNumber){
+            this._gameData.gameState = GameState.GameEnd;
+            this._gameData.currentActivePlayer = null;
+            this._gameData.currentTurnNumber = 0;
+        }
 
         let senderPlayer = this._room.players.find(player => player.Id == sender);
         if (!senderPlayer) {
@@ -74,6 +86,7 @@ export class Game {
         }
 
         senderPlayer.Score += 100;
+
         return senderPlayer.Score;
     }
 }

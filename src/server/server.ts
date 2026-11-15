@@ -54,7 +54,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("CreateRoom", (playerName, roundNumber, callback) => {
+  socket.on("CreateRoom", (playerName, totalRoundNumber, callback) => {
     let roomId: RoomId;
     do{
       roomId = Math.random()
@@ -63,7 +63,7 @@ io.on("connection", (socket) => {
           .toUpperCase();
     }while (roomMap.has(roomId) || roomId.includes('O') || roomId.includes('0'));
 
-    const room = new Room(roomId);
+    const room = new Room(roomId, totalRoundNumber);
     const playerId: PlayerId = socket.id;
 
     const newPlayer = new Player(playerId, playerName, socket);
@@ -241,10 +241,7 @@ function sendGameStartEvents(room: Room) {
   let newActivePlayer = <PlayerId>room.game.getGameData().currentActivePlayer;
   let player = findPlayer(newActivePlayer);
 
-  io.to(room.id).emit("Message", {
-    message: "starting new round - active player: " + player?.Name,
-    source: MessageSource.Server,
-  } satisfies MessagePayload);
+  sendServerMessage(room, "[Round " + (room.game.getGameData().currentRoundNumber + 1 )+"] active player: " + player?.Name);
 
   let searchedWord = <WordToGuess>room.game.getGameData().currentSearchedWord;
   io.to(room.id).emit("GameStart", newActivePlayer, searchedWord.category);
@@ -252,12 +249,22 @@ function sendGameStartEvents(room: Room) {
 }
 
 function sendGameEnd(room: Room) {
-  io.to(room.id).emit("Message", {
-    message: "game ended",
-    source: MessageSource.Server,
-  } satisfies MessagePayload);
-
+  sendServerMessage(room, "The game has ended");
+  sendStatsUpdate(room);
   io.to(room.id).emit("GameEnd");
+}
+
+function sendStatsUpdate(room: Room){
+  if(room.game.getGameData().gameState == GameState.GameEnd){
+    sendServerMessage(room, "--- Final Scores ---");
+  }else{
+    sendServerMessage(room, "--- Round " + (room.game.getGameData().currentRoundNumber) + " Scores ---");
+  }
+  let players = room.players.slice().sort((a, b) => a.Score - b.Score);
+  for (let player of players) {
+    sendServerMessage(room, player.Name +": "+player.Score + " Points");
+  }
+  sendServerMessage(room, "----------------------------");
 }
 
 function handleCorrectMessageReceived(room: Room, sender: Player, message: string) {
@@ -266,16 +273,24 @@ function handleCorrectMessageReceived(room: Room, sender: Player, message: strin
 
   io.to(room.id).emit("RoundEnd");
 
-  io.to(room.id).emit("Message", {
-    message: "correct guess '"+message+"' received from: " + sender?.Name,
-    source: MessageSource.Server,
-  } satisfies MessagePayload);
+  sendServerMessage(room, "correct guess '"+message+"' received from: " + sender?.Name);
+
+  if(room.game.getGameData().currentTurnNumber == 0){
+    sendStatsUpdate(room);
+  }
 
   if (room.game.getGameData().gameState == GameState.GameEnd) {
     sendGameEnd(room);
   } else {
     sendGameStartEvents(room);
   }
+}
+
+function sendServerMessage(room: Room, message: string) {
+  io.to(room.id).emit("Message", {
+    message: message,
+    source: MessageSource.Server,
+  } satisfies MessagePayload);
 }
 
 function findRoom(playerId: string): Room | undefined {

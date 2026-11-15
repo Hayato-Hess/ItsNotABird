@@ -9,10 +9,10 @@ export class Room {
     players: Player[];
     game: Game;
 
-    constructor(RoomId: RoomId) {
+    constructor(RoomId: RoomId, totalRoundNumber: number) {
         this.id = RoomId;
         this.players = [];
-        this.game = new Game(this);
+        this.game = new Game(this, totalRoundNumber);
     }
 
     public join(newPlayer: Player) {

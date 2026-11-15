@@ -11,6 +11,9 @@ export class GameData {
     gameState: GameState = GameState.Looby;
     wordList : WordToGuess[] = [];
     canvas : Canvas = {Emojis : []};
+    totalRoundNumber : number = 1;
+    currentRoundNumber : number = 0;
+    currentTurnNumber : number = 0;
 
     public toSharedGameData() : SharedGameData{
         return {

@@ -15,7 +15,7 @@ export function Rules() {
           <div style={{ color: "var(--color-primary)" }}>Rules:</div>
           <br />
           <p>
-            One person has to descripe a word with the ultimate universal
+            One person has to describe a word with the ultimate universal
             language{" "}
             <span style={{ color: "var(--color-primary)" }}>Emojies!</span> All
             others have to guess that word.
