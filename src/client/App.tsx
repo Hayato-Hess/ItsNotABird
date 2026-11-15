@@ -7,8 +7,6 @@ import { useEffect, useState } from "react";
 import { emojiUrl } from "./emojies/emojies";
 
 /** Pixel scale of the header background (top-bg.png). */
-const TOP_BG_SCALE = 2;
-
 const titleEmojiStyle = {
   height: "1.2em",
   verticalAlign: "-0.1em",
@@ -63,14 +61,9 @@ export function App() {
       }}
     >
       <h1
+        className="titlebar"
         style={{
           textAlign: "center",
-          borderStyle: "solid",
-          borderWidth: `0 ${13 * TOP_BG_SCALE}px ${6 * TOP_BG_SCALE}px`,
-          borderImageSource: "url(/top-bg.png)",
-          borderImageSlice: "0 13 6 fill",
-          borderImageRepeat: "stretch",
-          imageRendering: "pixelated",
           flex: "none",
           fontSize: "clamp(1rem, 4dvh, 2rem)",
           // Shift text 4px down so it looks centered including the decorative edge.
