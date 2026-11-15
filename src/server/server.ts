@@ -209,7 +209,7 @@ io.on("connection", (socket) => {
       return;
     }
 
-    sendServerMessage(room, player.Name + "gave up word was: '" + room.game.getGameData().currentSearchedWord);
+    sendServerMessage(room, player.Name + "gave up word was: '" + room.game.getGameData().currentSearchedWord?.word);
     room.game.nextTurn();
     handleRoundUpdate(room);
 
