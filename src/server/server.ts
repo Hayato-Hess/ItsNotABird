@@ -119,6 +119,10 @@ io.on("connection", (socket) => {
     }
 
     leaveRoom(room, playerId);
+    callback({
+      success : true,
+      data: void 0
+    });
   });
 
   socket.on("ToggleReady", (callback) => {
@@ -151,6 +155,10 @@ io.on("connection", (socket) => {
     if (game.getGameData().gameState == GameState.Started) {
       sendGameStartEvents(room);
     }
+    callback({
+      success : true,
+      data: void 0
+    });
   });
 
   socket.on("UpdateCanvas", (canvas, callback) => {
@@ -174,6 +182,11 @@ io.on("connection", (socket) => {
 
     room.game.updateCanvas(canvas);
     io.to(room.id).emit("UpdateCanvas", canvas);
+
+    callback({
+      success : true,
+      data: void 0
+    });
   });
 
   socket.on("Message", (message, callback) => {
@@ -206,6 +219,11 @@ io.on("connection", (socket) => {
         source: MessageSource.Server
       })
     }
+
+    callback({
+      success : true,
+      data: void 0
+    });
   });
 });
 

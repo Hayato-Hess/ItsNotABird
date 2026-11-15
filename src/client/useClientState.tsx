@@ -87,7 +87,9 @@ export function ClientStateProvider({
   };
 
   const leaveRoom = () => {
+    console.log("leave room client");
     socket.emit("LeaveRoom", (response) => {
+      console.log("leave room client callback received");
       if (!response.success) {
         toast.error(response.error);
         return;
