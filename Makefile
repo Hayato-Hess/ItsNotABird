@@ -26,7 +26,7 @@ dev: node_modules
 # so we download the Windows binary matching the local `node --version`.
 NODE_VERSION := $(shell node --version)
 SEA_DIR := dist/sea
-EXE := dist/emoji-guesser.exe
+EXE := dist/its-not-a-bird.exe
 
 exe: build
 	mkdir -p $(SEA_DIR)
