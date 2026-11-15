@@ -40,6 +40,7 @@ const ClientStateContext = createContext<{
   gameFunctions: {
     guess: (string: string) => void;
     updateCanvas: (canvas: Canvas) => void;
+    giveUp: () => void;
   };
   toggleReadyness: () => void;
 }>(null as never);
@@ -129,6 +130,11 @@ export function ClientStateProvider({
     });
     updateState({ canvas });
   };
+  const giveUp = () => {
+    socket.emit("GiveUp", (response) => {
+      if (!response.success) toast.error(response.error);
+    });
+  };
 
   useEffect(() => {
     socket.on("RoomUpdate", (room) => {
@@ -217,7 +223,7 @@ export function ClientStateProvider({
         ownPlayerId: socket.id as PlayerId,
         mainMenuFunctions: { joinRoom, createRoom },
         lobbyFunctions: { toggleReadyness, sendMessage, leaveRoom },
-        gameFunctions: { guess: sendMessage, updateCanvas },
+        gameFunctions: { guess: sendMessage, updateCanvas, giveUp },
         toggleReadyness,
       }}
     >
