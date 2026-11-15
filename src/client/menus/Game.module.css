@@ -42,6 +42,17 @@
   text-overflow: ellipsis;
 }
 
+/*
+ * Emoji size relative to the canvas width. Registered as <length> so it is
+ * computed to px here on .stage and inherited as a fixed value (otherwise the
+ * cqw/cqh inside --canvas-w would be resolved again at each emoji).
+ */
+@property --emoji-size {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 48px;
+}
+
 /* Toolbar below the canvas */
 .stage {
   --canvas-w: min(
@@ -49,6 +60,7 @@
     (100cqh - var(--header-h) - var(--toolbar-min-h) - 2 * var(--gap)) *
       var(--ratio)
   );
+  --emoji-size: calc(var(--canvas-w) * 0.1);
 
   flex: 1;
   min-height: 0;
