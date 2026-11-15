@@ -144,6 +144,7 @@ export const DraggableEmojie = (props: DraggableEmojieProps) => {
       {props.selected && (
         <div
           className={styles.frame}
+          data-snapshot-ignore
           style={{
             inset: `${(1 - scale) * 50}%`,
             transform: `rotate(${rotation}deg)`,

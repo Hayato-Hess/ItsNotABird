@@ -4,4 +4,5 @@ export type MessagePayload = {
   message: string;
   source: MessageSource;
   sender?: string;
+  image?: string;
 };

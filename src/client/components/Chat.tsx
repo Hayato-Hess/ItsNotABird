@@ -59,6 +59,24 @@ export function Chat(props: ChatProps) {
       >
         {state.messages.map((msg, index) => (
           <div key={index}>
+            {msg.image && (
+              <img
+                src={msg.image}
+                onLoad={() => {
+                  const el = messagesRef.current;
+                  if (el && stickToBottom.current) {
+                    el.scrollTop = el.scrollHeight;
+                  }
+                }}
+                style={{
+                  display: "block",
+                  maxWidth: "min(240px, 100%)",
+                  borderRadius: "6px",
+                  margin: "4px 0",
+                  border: "1px solid #fff",
+                }}
+              />
+            )}
             {msg.sender && (
               <span
                 style={{

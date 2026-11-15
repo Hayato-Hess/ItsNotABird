@@ -7,6 +7,8 @@ import { SharedRoom } from "../shared/Data/SharedRoom";
 import { toast } from "react-toastify";
 import { WordToGuess } from "../shared/Data/WordToGuess";
 import { MessagePayload } from "../shared/Data/Messages/MessagePayload";
+import { MessageSource } from "../shared/Data/Messages/MessageSource";
+import { toJpeg } from "html-to-image";
 
 export interface ClientState {
   state: "main" | "lobby" | "game";
@@ -132,6 +134,46 @@ export function ClientStateProvider({
     socket.on("RoomUpdate", (room) => {
       updateState({ room });
     });
+    socket.on("RoundEnd", () => {
+      const canvasEl = document.querySelector<HTMLElement>(
+        '[data-canvas-id="canvas"]',
+      );
+      if (!canvasEl?.querySelector("[data-canvas-emoji]")) return;
+
+      const placeholder: MessagePayload = {
+        message: "",
+        source: MessageSource.Server,
+      };
+      setState((prev) => ({
+        ...prev,
+        messages: [...prev.messages, placeholder],
+      }));
+      const width = 240;
+      toJpeg(canvasEl, {
+        canvasWidth: width,
+        canvasHeight: (width * canvasEl.offsetHeight) / canvasEl.offsetWidth,
+        pixelRatio: 1,
+        quality: 0.8,
+        skipFonts: true,
+        filter: (node) =>
+          !(node instanceof HTMLElement && "snapshotIgnore" in node.dataset),
+      })
+        .then((image) =>
+          setState((prev) => ({
+            ...prev,
+            messages: prev.messages.map((m) =>
+              m === placeholder ? { ...m, image } : m,
+            ),
+          })),
+        )
+        .catch((err) => {
+          console.error("Canvas snapshot failed", err);
+          setState((prev) => ({
+            ...prev,
+            messages: prev.messages.filter((m) => m !== placeholder),
+          }));
+        });
+    });
     socket.on("GameStart", (newActivePlayer: PlayerId, category: string) => {
       updateState({
         state: "game",
@@ -159,6 +201,7 @@ export function ClientStateProvider({
     });
     return () => {
       socket.off("RoomUpdate");
+      socket.off("RoundEnd");
       socket.off("GameStart");
       socket.off("UpdateCanvas");
       socket.off("GameEnd");
