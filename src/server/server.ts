@@ -14,6 +14,7 @@ import {GameState} from "../shared/Data/GameState.js";
 import {MessagePayload} from "../shared/Data/Messages/MessagePayload.js";
 import {MessageSource} from "../shared/Data/Messages/MessageSource.js";
 import {WordToGuess} from "../shared/Data/WordToGuess.js";
+import {endGameCanvas} from "./Data/EndGameCanvas.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
 
@@ -282,6 +283,7 @@ function sendGameEnd(room: Room) {
   sendServerMessage(room, "The game has ended");
   sendStatsUpdate(room);
   io.to(room.id).emit("GameEnd");
+  io.to(room.id).emit("UpdateCanvas", endGameCanvas)
 }
 
 function sendStatsUpdate(room: Room){
