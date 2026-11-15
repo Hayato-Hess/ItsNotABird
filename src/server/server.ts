@@ -304,5 +304,7 @@ function leaveRoom(room: Room, playerId: string) {
 
   if (room.isEmpty()) {
     roomMap.delete(room.id);
+  }else{
+    sendRoomUpdate(room)
   }
 }
