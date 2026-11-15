@@ -30,6 +30,9 @@ export interface ClientToServerEvents {
     roomId: RoomId,
     callback: (room: ServerResponse<SharedRoom>) => void,
   ) => void;
+  LeaveRoom: (
+      callback: (room: ServerResponse<void>) => void,
+  ) => void;
 
   ToggleReady: (
     callback: (error: ServerResponse<void>) => void,
