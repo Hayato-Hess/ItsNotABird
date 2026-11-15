@@ -1,5 +1,7 @@
 import {createServer} from "node:http";
 import {networkInterfaces} from "node:os";
+import {extname} from "node:path";
+import sea from "node:sea";
 import {fileURLToPath} from "node:url";
 import express from "express";
 import {Server} from "socket.io";
@@ -16,7 +18,20 @@ import {WordToGuess} from "../shared/Data/WordToGuess.js";
 const PORT = Number(process.env.PORT ?? 3000);
 
 const app = express();
-app.use(express.static(fileURLToPath(new URL("../client", import.meta.url))));
+if (sea.isSea()) {
+  app.use((req, res, next) => {
+    const key = req.path === "/" ? "/index.html" : req.path;
+    let data: ArrayBuffer;
+    try {
+      data = sea.getAsset(key);
+    } catch {
+      return next();
+    }
+    res.type(extname(key)).send(Buffer.from(data));
+  });
+} else {
+  app.use(express.static(fileURLToPath(new URL("../client", import.meta.url))));
+}
 
 const http = createServer(app);
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(http);

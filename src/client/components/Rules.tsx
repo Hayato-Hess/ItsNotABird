@@ -64,6 +64,10 @@ export function Rules() {
           <div>
             - Assiting in the scale and rotation logic of emoji placement
           </div>
+          <div>
+            - Allowing us to to export a `.exe` so you can play at home once our
+            server is no longer available
+          </div>
         </p>
       </div>
     </div>
